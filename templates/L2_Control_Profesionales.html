@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Monitoreo.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">    
+    <title>Monitoreo de profesionales</title>
+</head>
+<body>
+    <h1 align="center" style="margin-bottom: 0px;">Página de monitoreo de profesionales</h1>
+    <p align="center" style="margin-top: 0px;">Esta página muestra el avance del profesional durante este semestre</p><br>
+    <div class="caja">    
+        {% for index, profesional in enumerate(data_monitoreo) %}
+            <div style="border: 1px solid #ccc; margin-bottom: 5px;">
+            <p align="center" style="font-size: 17px; margin-bottom: 0px;"><strong>{{ profesional[0] }}: {{ profesional[1] }}</strong></p>
+            <div class="container" style="margin-bottom: 0px;">
+                <p class="text-support">Colegios actualizados: {{ profesional[2] }}</p>
+                <p class="text-support">Colegios atendidos: {{ profesional[3] }}</p>
+            </div>
+            <div class="container">
+                <div class="progress-bar" id="progress-bar1-{{ index }}">
+                    <div class="progress-bar-inner"></div>
+                </div>
+                <div class="progress-bar" id="progress-bar2-{{ index }}">
+                    <div class="progress-bar-inner"></div><br>
+                </div>
+            </div>
+            <div class="container" style="margin-bottom: 0px;">
+                <p class="text-support">Colegios actualizados A: {{ profesional[4] }}/{{ profesional[6] }}</p>
+                <p class="text-support">Colegios atendidos A: {{ profesional[5] }}/{{ profesional[6] }}</p>
+            </div>
+            <div class="container">
+                <div class="progress-bar" id="progress-bar3-{{ index }}">
+                    <div class="progress-bar-inner"></div>
+                </div>
+                <div class="progress-bar" id="progress-bar4-{{ index }}">
+                    <div class="progress-bar-inner"></div><br>
+                </div>
+            </div>
+            <div class="container" style="margin-bottom: 0px;">
+                <p class="text-support">Colegios actualizados B: {{ profesional[7] }}/{{ profesional[9] }}</p>
+                <p class="text-support">Colegios atendidos B: {{ profesional[8] }}/{{ profesional[9] }}</p>
+            </div>
+            <div class="container">
+                <div class="progress-bar" id="progress-bar5-{{ index }}">
+                    <div class="progress-bar-inner"></div>
+                </div>
+                <div class="progress-bar" id="progress-bar6-{{ index }}">
+                    <div class="progress-bar-inner"></div><br>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <form action="{{ url_for('open_admin_menu') }}">
+            <button type="submit" style="margin-bottom: 10px;">Volver a menú de administrador</button>
+        </form>
+        {% if session["class"]=="admin" or session["nombre_usuario"]=='LAURA TOLE' %}
+        <table border="1" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+                <tr>
+                    <th>Nombre de colegio</th>
+                    <th>Calendario</th>
+                    <th>Fecha de actualización</th>
+                    <th>Fecha de atención</th>
+                    <th>Estado actualización</th>
+                    <th>Estado atención</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for colegio in data %}
+                <tr>
+                    <td><a style="font-size: 15px;" href="{{ url_for('load_school_data', nombre_colegio=colegio[2]) }}">{{ colegio[2] }}</a></td>
+                    <td>{{ colegio[3] }}</td>
+                    <td>{{ colegio[1] }}</td>
+                    <td>{{ colegio[0] }}</td>
+                    <td>{{ colegio[5] }}</td>
+                    <td>{{ colegio[4] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+        {% endif %}   
+    </div>
+    <script>
+        function updateProgressBar(id, actual, total) {
+            var progressBarInner = document.querySelector('#' + id + ' .progress-bar-inner');
+            var percentage = (actual / total) * 100;
+            progressBarInner.style.width = percentage + '%';
+            progressBarInner.innerHTML = Math.round(percentage) + '%';
+        }
+
+        {% for index, profesional in enumerate(data_monitoreo) %}
+            var col_actual = {{ profesional[2] }};
+            var col_atend = {{ profesional[3] }};
+            var total = {{ profesional[1] }};
+            var cactualA = {{ profesional[4] }};
+            var catendA = {{ profesional[5] }};
+            var ctotalA = {{ profesional[6] }};
+            var cactualB = {{ profesional[7] }};
+            var catendB = {{ profesional[8] }};
+            var ctotalB = {{ profesional[9] }};
+            
+            updateProgressBar('progress-bar1-{{ index }}', col_actual, total);
+            updateProgressBar('progress-bar2-{{ index }}', col_atend, total);
+            updateProgressBar('progress-bar3-{{ index }}', cactualA, ctotalA);
+            updateProgressBar('progress-bar4-{{ index }}', catendA, ctotalA);
+            updateProgressBar('progress-bar5-{{ index }}', cactualB, ctotalB);
+            updateProgressBar('progress-bar6-{{ index }}', catendB, ctotalB);
+            
+        {% endfor %}
+    </script>
+</body>
+</html>

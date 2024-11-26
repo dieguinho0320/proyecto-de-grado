@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='EW.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <title>Ventana emergente para crear cuenta</title>
+    <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 1001;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-overlay" id="ventanaEmergente">
+        <div class="modal-content">
+            {% if response==1 %}
+                <h2 align="center">¡Creación de usuario exitoso!</h2>
+                <p>La nueva cuenta ha sido creada de manera exitosa.</p>
+            {% elif response==2 %}
+                <h2 align="center">¡La contraseña que has ingresado es inválida!</h2>
+                <p>Recuerda que tu contraseña debe tener 10 caracteres incluyendo letras, 
+                    números y caracteres especiales como "$/&%""
+                </p>
+            {% elif response==3 or response==7%}
+                <h2 align="center">¡Validación de contraseña fallida!</h2>
+                <p> Tu confirmación de contraseña no coincide con la nueva contraseña
+                </p>
+            {% elif response==4%}
+                <h2 align="center">Usuario existente</h2>
+                <p> El correo uniandes ingresado ya está registrado para otro usuario </p>
+                </p>
+            {% elif response==5 %}
+                <h2 align="center">¡Contraseña incorrecta!</h2>
+                <p>La contraseña ingresada no coincide con la contraseña registrada</p>
+            {% elif response==6 %}
+                <h2 align="center">¡Cambio de contraseña exitoso!</h2>
+                <p> Tu contraseña fue correctamente actualizada, en un momento tendrás que volver a ingresar</p>
+            {% endif %}
+
+            <div class="button-container">
+                <button onclick="cerrarVentana()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mostrarVentana() {
+            var ventana = document.getElementById('ventanaEmergente');
+            ventana.style.display = 'block';
+        }
+
+        function cerrarVentana() {
+            var ventana = document.getElementById('ventanaEmergente');
+            ventana.style.display = 'none';
+                {% if response==1 %}
+                    window.location.href = "/Menu_Administrador";
+                {% elif response==5 %}
+                    window.location.href = "/Menu_Administrador/Cambio_clave"
+                {% elif response==6 %}
+                    window.location.href = "/"
+                {% elif response==7 %}
+                    window.location.href = "/Menu_Administrador/Cambio_clave"                    
+                {% else %}
+                    window.location.href = "/registro_sesion";
+                {% endif %}
+        }
+
+        window.onload = mostrarVentana;
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creación de nuevo usuario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='IP_Login.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <style>
+        body, html {
+            height: 100%;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <div class="contenedor" style="font-size: 15px; margin-top: 10px;">
+            <h3 align="center" style="font-size: 25px;"class="text-center">Creación de cuentas:</h3>
+            <form method="POST" action="/crear_usuario">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Ingresa el email de registro:</label><br>
+                    <input type="email" class="form-control" placeholder="Escribe el correo institucional" id="email" name="email">
+                </div>
+                <div class="mb-3">
+                    <label for="nombre_colegio" class="form-label">Ingresa el nombre del usuario:</label><br>
+                    <input type="nombre_colegio" class="form-control" placeholder="Escribe el nombre del usuario" id="nombre_colegio" name="nombre_colegio">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Ingresa una contraseña:</label><br>
+                    <input style="margin-bottom: 0px;" type="password" class="form-control" placeholder="Tu contraseña debe tener 10 caracteres" id="password" name="password" maxlength="10">
+                    <p class="texto-destacado">Tu contraseña debe tener 10 caracteres entre letras y números</p>
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirma tu contraseña:</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" maxlength="10">
+                </div>
+                
+                <button class="btn-success" type="submit" style="margin-bottom: 10px">Enviar Datos</button>
+            </form>
+            <form style="flex: 1;" action="{{ url_for('open_admin_menu', email_admin = email_admin)}}" method="POST">
+                <button class="btn-success" type="submit">Volver a menú de administrador</button>
+            </form>
+
+    </div>    
+</body>
+</html>

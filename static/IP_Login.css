@@ -1,0 +1,86 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: url(/static/Images/IMAG1_InicioSesión.png) no-repeat center center fixed;   
+    background-size: cover;
+    background-position: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+} 
+.caja{
+    height: 70%;
+    margin-top: 5%;
+    margin-left: 35%;
+    margin-right: 35%;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+    background-color: white;
+    padding: 2.2%;
+}
+.caja label {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+.caja input {
+    width: 100%;
+    margin-bottom: 35px;
+    font-size: 15px;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 0px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+}
+.caja button{
+    width: 100%;
+    height: 30px;
+    margin: 0%;
+    border: none;
+    cursor: pointer;
+}
+.btn-success {
+    color: white; 
+    background-color: #4500CF; 
+    border-radius: 10px;
+    display: block;
+    width: 95%;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+    border: none;
+}
+.btn-success:hover {
+    background-color: #9966ff;
+}
+.contenedor{
+    height: 85%;
+    margin-top: 3%;
+    margin-left: 30%;
+    margin-right: 30%;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+    background-color: white;
+    padding: 2.2%;
+}
+.contenedor input{
+    width: 100%;
+    height: 100%;
+    margin-bottom: 25px;
+    font-size: 15px;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 0px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;  
+}
+.contenedor button{
+    width: 100%;
+    height: 30px;
+    margin: 0%;
+    border: none;
+    cursor: pointer
+}
+.texto-destacado {
+    margin-top: 0px;
+    color: red;
+    font-size: 12px;
+    }

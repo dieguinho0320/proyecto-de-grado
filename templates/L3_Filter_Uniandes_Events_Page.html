@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='General_lists.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">    
+    <title>Filtro para eventos uniandes</title>
+    <style>
+        .form-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .inline-elements {
+            margin-right: 10px; 
+        }
+        .form-input {
+            flex-grow: 1;
+            margin-right: 10px; 
+        }
+    </style>
+</head>
+<body>
+    <h1 align="center">Búsqueda filtrada: Eventos uniandes</h1>
+    <hr>
+    <div>
+        <div class="inline-container" style="margin: 25px; background-color: white; padding: 10px; border: 1px solid black; border-radius: 2px;">
+        <form action="{{ url_for('busqueda_filtrada_eventos_uniandes') }}" method="POST">
+            <label>Seleccione el evento a buscar: </label>
+            <select name="evento_uniandes" style="margin-bottom: 10px;">
+                <option value="NULL" selected> </option>
+                <option value="CHARLA O FERIA VIRTUAL">CHARLA O FERIA VIRTUAL</option>
+                <option value="FERIA EN COLEGIO">FERIA EN COLEGIO</option>
+                <option value="UNIANDES EN TU COLEGIO">UNIANDES EN TU COLEGIO</option>
+                <option value="CAMINANDO EN UNIANDES">CAMINANDO EN UNIANDES</option>
+                <option value="FERIA REGIONAL">FERIA REGIONAL</option>
+                <option value="UN TICKET PARA MI FUTURO">UN TICKET PARA MI FUTURO</option>
+                <option value="UNIANDES FEST">UNIANDES FEST</option>
+                <option value="VISITAS GUIADAS">VISITAS GUIADAS</option>
+                <option value="ACTIVIDAD EXTRAORDINARIA">ACTIVIDAD EXTRAORDINARIA</option>
+            </select><br>
+            <label>Seleccione profesional: </label>
+            <select name="encargado_uniandes">
+                <option value="NULL" selected>TODOS LOS PROFESIONALES</option>
+                {% for profesional in list_profesionales %}
+                    <option value="{{ profesional[0] }}">{{ profesional[0] }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Realizar busqueda filtrada</button>
+        </form>
+        <form style="flex: 1;" action="{{ url_for('open_admin_menu', email_admin = email_admin)}}" method="POST">
+            <button type="submit" class="Volver-button">Volver a menú de administrador</button>
+        </form>
+        </div>
+        <hr>
+        <div>
+            {% if response==1 %}
+            <form action="{{ url_for('descargar_excel') }}" method="POST" class="form-container">
+                <input type="hidden" name="data" id="data_result_search" value="{{ data_result_search }}">
+                <input type="hidden" name="list_columnas" value="{{ list_columnas }}">
+                <label class="inline-elements" style="margin-left: 2%;">Escriba el nombre del archivo: </label>
+                <input name="name_file">
+                <label class="inline-elements">.xlsx</label>
+                <input type="hidden" name="keyword" value="eventos uniandes">
+                <div class="button-container">
+                    <button class="form-descargar-excel_button" type="submit" name="action" value="Descargar">Descargar como Excel</button>        
+                </div>
+            </form><br>
+            <p style="margin-left: 2%;">Número de coincidencias en búsqueda: {{ num_coincidences }}</p>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            {% for columna in list_columnas %}
+                                <th>{{ columna }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i, fila in enumerate(result_search) %}
+                        <tr>
+                            {% for j, elemento in enumerate(fila) %}
+                                <td>{{ elemento }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+    
+        </div>
+        <script>
+            {% if result_search is defined and result_search %}
+                var data = {{ result_search | tojson | safe }};
+                var matrixJson = JSON.stringify(data);
+                document.getElementById('data_result_search').value = matrixJson;
+            {% endif %}    
+        </script> 
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='General_lists.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">    
+    <title>Monitoreo contacto profesionales</title>
+    <style>
+        body {
+            margin: 20px;
+        }
+    
+        label,
+        input,
+        select,
+        button {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+    <h1 align="center">Monitoreo de contacto de profesionales</h1>
+<body>
+    <div class="inline-container" style="margin: 25px; background-color: white; padding: 10px; border: 1px solid black; border-radius: 2px;">
+        <form action="{{ url_for('monitoreo_contacto') }}" method="POST">
+            <label>Nombre colegio: </label>
+            <input type="text" name="nombre_colegio" style="margin-top: 0px; width: 800px;"><br>
+            <label>Tipo de contacto: </label>
+            <select type="text" name="tipo_contacto">
+                <option value="NULL" selected> </option>
+                <option value="Llamada telefónica">Llamada telefónica</option>
+                <option value="Envío de correo">Envío de correo</option>
+                <option value="Atención presencial">Atención presencial</option>      
+                <option value="Otro">Otro</option>      
+            </select><br>
+            <label>Profesional encargado</label>
+            <select name="profesional">
+                <option value="NULL" selected></option>
+                {% for profesional in list_profesionales %}
+                    <option value="{{ profesional[0] }}">{{ profesional[0] }}</option>
+                {% endfor %}
+            </select><br>
+            <label>Estado de actualización:</label>
+            <select name="estado_actualizacion">
+                <option value="NULL" selected> </option>
+                <option value="ACTUALIZADO">ACTUALIZADO</option>
+                <option value="NO ACTUALIZADO">NO ACTUALIZADO</option>
+            </select><br>
+            <label>Estado de atención</label>
+            <select name="estado_atencion">
+                <option value="NULL" selected> </option>
+                <option value="ATENDIDO">ATENDIDO</option>
+                <option value="NO ATENDIDO">NO ATENDIDO</option>
+            </select><br>
+            <button type="submit">Iniciar Búsqueda</button>
+        </form>
+        <form style="flex: 1;" action="{{ url_for('open_admin_menu', email_admin = email_admin)}}" method="POST">
+            <button type="submit" class="Volver-button">Volver a menú de administrador</button>
+        </form>    
+    </div>
+    {% if response==1 %}
+    <hr style="width: 96%;">
+    <form action="{{ url_for('descargar_excel') }}" method="POST">
+        <input style="margin-top: 0px;" type="hidden" name="data" id="data_result_search" value="{{ data_result_search }}">
+        <input type="hidden" name="list_columnas" value="{{ list_columnas }}">
+        <label style="margin-left: 2%;">Escriba el nombre del archivo: </label>
+        <input name="name_file">
+        <input style="margin-top: 0px;" type="hidden" name="keyword" value="monitcontacto">
+        <label>.xlsx</label>
+        <button class="form-descargar-excel_button" type="submit" name="action" value="Descargar">Descargar como Excel</button>        
+    </form><br>
+    <p style="margin-left: 2%; margin-top: 0px;">Número de coincidencias en búsqueda: {{ num_coincidences }}</p>
+    <table border="1">
+
+        <thead>
+            <tr>
+                {% for columna in list_columnas %}
+                    <th>{{ columna }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for i, fila in enumerate(result_search) %}
+            <tr>
+                {% for j, elemento in enumerate(fila) %}
+                    <td>{{ elemento }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <br>
+    <script>
+        {% if result_search is defined and result_search %}
+            var data = {{ result_search | tojson | safe }};
+            var matrixJson = JSON.stringify(data);
+            document.getElementById('data_result_search').value = matrixJson;
+        {% endif %}    
+        </script>
+</body>
+</html>

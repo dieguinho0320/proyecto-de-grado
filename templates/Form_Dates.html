@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+</head>
+<body>
+    <h1>Cronograma del Colegio</h1>
+    <ul>
+        {% for event in TCronograma %}
+            <li>{{ event[1] }} - {{ event[2] }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Agregar fecha al calendario</h2>
+    <form action="/Eventos_Colegio" method="post">
+        <label for="name">Nombre de la fecha:</label>
+        <input type="text" name="name" required>
+        <label for="date">Fecha:</label>
+        <input type="date" name="date" required>
+        <button type="submit">Crear fecha</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='IP_Login.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+</head>
+<body>
+    <div class="caja" style="height: 100%;">
+        <form class="form-control" action="/inicio_sesion" method="POST">
+            <h1 align="center" style="font-size: 30px;"><b>Inicio de Sesión</b></h1>
+            {% if mensaje %}
+            <div class="alert alert-danger" role="alert">
+                {{ mensaje }}
+            </div>
+            {% endif %}
+                <label for="exampleInputEmail1 ">Correo</label><br>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingrese su Correo " name="correo">
+                <small id="emailHelp" class="form-text text-muted"></small>
+            <br>
+                <label for="exampleInputPassword1 ">Contraseña</label><br>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Ingrese su Contraseña" name="password" maxlength="10" style="margin-bottom: 35px;">
+            <div class="form-check"></div>
+            <div>
+                <button type="submit" class="btn btn-success" style="margin-bottom: 10px;">Ingresar</button>
+            </div>
+        </form>
+        <br>
+    </div>
+</body>
+</html>

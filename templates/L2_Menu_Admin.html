@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Administrador</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='L2_Menu_Admin.css') }}">
+    <style>
+        body{
+            background: url(/static/Images/IMAG6.png)
+        }
+    </style>
+</head>
+<body>
+    <div class="caja">
+        <div class="inline-container">
+            {% if session["class"]=="superadmin" %}
+                <h1 class="header-text centered-title" style="margin-left: 2%; margin-bottom: 0px;">HOLA {{ nombre_usuario }}</h1>
+            {% elif session["class"]=="admin" %}
+                <a href="/Monitoreo_profesionales" style="color: black">
+                    <h1 class="header-text centered-title" style="margin-left: 2%; margin-bottom: 0px;">HOLA {{ nombre_usuario }}</a></h1>                
+                </a>
+                {% endif %}
+            <form action="{{ url_for('cambio_clave') }}" class="align-right" method="post" style="margin-right: 10px; margin-top: 10px;">
+                <button style="border: 0px; solid #7D7D7D" type="submit" class="password_button">Cambiar mi contraseña</button>
+            </form>
+        </div>
+        
+        {% if session["class"] == "superadmin" %}
+        <p class="header-text" style="text-align: left; margin-left: 2%; margin-top: 2px; color: #7D7D7D;">Posees permisos de super administrador</p>
+        {% endif %}
+        <hr style="width: 98%;">
+        <div class="caja" style="margin-right: 10px; margin-left: 10px; margin-bottom: 10px;">
+            <h2 class="header-text" style="text-align: center; margin-top: 5px;">Búsqueda por palabra</h2>
+            <div class="centered-buttons">
+                <form action="{{ url_for('search_school') }}" method="POST">
+                    <input style="width: 750px; height: 25px;border: 1px solid black;" type="text" name="query" placeholder="Ingresa el colegio a buscar" size="50 px">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            
+            <h2 class="header-text" style="text-align: center; color: #7D7D7D;">Búsqueda filtrada</h2>
+            
+            <form action="{{ url_for('filtered_search') }}" method="POST">
+                <div class="centered-buttons">
+                    <button type="submit" name="action" value="BusColegios">Búsqueda por colegios</button>
+                    <button type="submit" name="action" value="BusProfesores">Búsqueda por profesores</button>
+                    <button type="submit" name="action" value="BusEventos">Búsqueda por eventos</button>
+                    <button type="submit" name="action" value="MonContacto">Monitoreo de contacto</button>
+                </div>
+            </form>
+            <h3 class="header-text" style="text-align: center; color: #7D7D7D;">Descargar bases de datos</h3>
+            <form action="{{ url_for('descargar_tabla') }}" method="POST">
+                <div class="centered-buttons">
+                    <button type="submit" name="action" value="Colegios">Descargar database colegios</button>
+                    <button type="submit" name="action" value="Profesores">Descargar database profesores</button>
+                    <button type="submit" name="action" value="Eventos">Descargar database eventos</button>
+                    <button type="submit" name="action" value="Colegios - Correos">Descargar colegios separado por correo</button>
+                </div>                
+            </form>
+            
+            {% if session["class"] == "superadmin" %}
+            <h2 class="header-text" style="text-align: center;">Funciones de super administrador</h2>
+            
+            <div class="centered-buttons">
+                <form action="{{ url_for('signin') }}" method="POST">
+                    <button type="submit">Crear nuevo usuario</button>
+                </form>
+                <form action="{{ url_for('transferir_colegios_page') }}" method="POST">
+                    <button type="submit">Transferir colegios entre usuarios</button>
+                </form>
+                <form action="{{ url_for('EW_create_school') }}" method="POST">
+                    <button type="submit">Crear Colegio</button>
+                </form>
+                <form action="{{ url_for('manage_users_page') }}" method="POST">
+                    <button type="submit">Administrar profesionales</button>
+                </form>
+                <form action="{{ url_for('edit_official_uniandes_events') }}" method="POST">
+                    <button type="submit">Editar eventos</button>
+                </form>
+                <form action="{{ url_for('monitoreo_profesionales') }}" method="POST">
+                    <button type="submit">Monitoreo profesionales</button>
+                </form>
+            </div>
+            {% endif %}
+            <br>
+            <form action="{{ url_for('sing_off') }}" method="POST" style="flex: 1;">
+                <button type="submit" class="Volver_button">Cerrar Sesión</button>
+            </form>
+            
+        </div>
+    </div>
+</body>
+</html>

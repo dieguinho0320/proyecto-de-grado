@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Formulario Datos colegio</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='General_Table&Filter.css') }}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">    
+        <link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
+    <style>
+        body{
+            background-color: url(/static/Images/IMAG5.png);
+            background-repeat: repeat;
+        }
+    </style>    
+    </head>
+    <body style="background-image: url(/static/Images/IMAG5.png); background-repeat: repeat;">
+        <h1 align="center" >{{ nombre_colegio }}</h1>
+        <hr>
+        <form action="/Actualizar_Datos" method="POST">
+            <div style="background-color: #eae9e4; margin-left: 10px;">
+            <p style="margin-left: 20px;">
+                En esta sección podrás encontrar los datos más importantes de tu colegio. Si quieres cambiar o incluir algún dato, escríbelo dentro de la 
+                casilla correspondiente y presiona el botón de "Actualizar datos" al final de la página.
+            </p>
+            <p style="margin-left: 20px;"><strong>Nota:</strong> Para actualizar la información de actividades, eventos y fechas importantes dirigete a los botones en la parte inferior de esta página</p>
+            <fieldset>
+                <legend>Datos principales del Colegio</legend>
+                
+                <label>Nombre del colegio:</label>
+                <input class="aligned-input" type="text" name="nombre_colegio" size="100" style="margin-bottom: 10px"/ value="{{ nombre_colegio }}"><br>
+                {% if session["class"]=="superadmin" %}
+                    <label >Estado actual del colegio:</label>
+                    <select name="status" style="margin-bottom: 4px">
+                        <option value="ACTIVO" {% if dataTColegio[13]=="ACTIVO" %}selected{% endif %}>ACTIVO</option>
+                        <option value="CERRADO" {% if dataTColegio[13]=="CERRADO" %}selected{% endif %}>CERRADO</option>
+                        <option value="ELIMINAR">ELIMINAR</option>
+                    </select><br>
+                {% else %}
+                    <label> Estado actual del colegio: <p style="display: inline-block; margin-left: 5px; margin-top: 5px; margin-bottom: 2px;"><b>{{ dataTColegio[13] }}</b></p></label><br>
+                    <input type="hidden" name="status" value="{{ dataTColegio[13] }}">
+                {% endif %}
+                <label >Última fecha de actualización:</label><p style="display: inline-block; margin-left: 5px; margin-top: 5px; margin-bottom: 2px;">{{ dataTColegio[2] }}</p><br>
+                <label >Última fecha de atención: <p style="display: inline-block; margin-left: 5px; margin-top: 5px; margin-bottom: 2px;">{{ dataTColegio[11] }}</p></label><br>
+                <label >Último tipo de atención: <p style="display: inline-block; margin-left: 5px; margin-top: 5px; margin-bottom: 5px;">{{ dataTColegio[12] }}</p></label><br>
+
+                <label>Encargado Uniandes:</label>
+                <select name="encargado_uniandes" style="margin-bottom: 10px">
+                    <option value="NO ASIGNADO" selected>NO ASIGNADO</option>
+                    {% for Encargado in lista_encargados %}
+                        <option value="{{ Encargado[0] }}" {% if dataTColegio[3] == Encargado[0] %}selected{% endif %}>{{ Encargado[0] }}</option>
+                    {% endfor %}
+                </select><br />
+                <label>Dirección del colegio: </label>
+                <input class="aligned-input" type="text" name="dir_colegio" size="100" style="margin-bottom: 10px"/ value="{{ dataTColegio[7] }}"><br />
+                <label>Teléfono Colegio:</label>
+                <input class="aligned-input" type="text" name="tel_colegio" maxlength="10" style="margin-bottom: 10px"/ value="{{ dataTColegio[4] }}"><br />
+                <label>Seleccione Departamento</label>
+                <select name="Departamento_Colegio" style="margin-bottom:  10px">
+                    <option value="NO REGISTRADA" selected>CIUDAD NO REGISTRADA</option>
+                    <option value="BOGOTÁ D.C." {% if dataTColegio[5] == 'BOGOTÁ D.C.' %}selected{% endif %}>BOGOTÁ D.C</option>
+                    <option value="AMAZONAS" {% if dataTColegio[5] == 'AMAZONAS' %}selected{% endif %}>AMAZONAS</option>
+                    <option value="ANTIOQUÍA" {% if dataTColegio[5] == 'ANTIOQUÍA' %}selected{% endif %}>ANTIOQUÍA</option>
+                    <option value="ARAUCA" {% if dataTColegio[5] == 'ARAUCA' %}selected{% endif %}>ARAUCA</option>
+                    <option value="ATLÁNTICO" {% if dataTColegio[5] == 'ATLÁNTICO' %}selected{% endif %}>ATLÁNTICO</option>
+                    <option value="BOLÍVAR" {% if dataTColegio[5] == 'BOLÍVAR' %}selected{% endif %}>BOLÍVAR</option>
+                    <option value="BOYACÁ" {% if dataTColegio[5] == 'BOYACÁ' %}selected{% endif %}>BOYACÁ</option>
+                    <option value="CALDAS" {% if dataTColegio[5] == 'CALDAS' %}selected{% endif %}>CALDAS</option>
+                    <option value="CAQUETÁ" {% if dataTColegio[5] == 'CAQUETÁ' %}selected{% endif %}>CAQUETÁ</option>
+                    <option value="CASANARE" {% if dataTColegio[5] == 'CASANARE' %}selected{% endif %}>CASANARE</option>
+                    <option value="CAUCA" {% if dataTColegio[5] == 'CAUCA' %}selected{% endif %}>CAUCA</option>
+                    <option value="CESAR" {% if dataTColegio[5] == 'CESAR' %}selected{% endif %}>CESAR</option>
+                    <option value="CHOCÓ" {% if dataTColegio[5] == 'CHOCÓ' %}selected{% endif %}>CHOCÓ</option>
+                    <option value="CÓRDOBA" {% if dataTColegio[5] == 'CÓRDOBA' %}selected{% endif %}>CÓRDOBA</option>
+                    <option value="CUNDINAMARCA" {% if dataTColegio[5] == 'CUNDINAMARCA' %}selected{% endif %}>CUNDINAMARCA</option>
+                    <option value="GUAINÍA" {% if dataTColegio[5] == 'GUAINÍA' %}selected{% endif %}>GUAINÍA</option>
+                    <option value="GUAVIARE" {% if dataTColegio[5] == 'GUAVIARE' %}selected{% endif %}>GUAVIARE</option>
+                    <option value="HUILA" {% if dataTColegio[5] == 'HUILA' %}selected{% endif %}>HUILA</option>
+                    <option value="LA GUAJIRA" {% if dataTColegio[5] == 'LA GUAJIRA' %}selected{% endif %}>LA GUAJIRA</option>
+                    <option value="MAGDALENA" {% if dataTColegio[5] == 'MAGDALENA' %}selected{% endif %}>MAGDALENA</option>
+                    <option value="META" {% if dataTColegio[5] == 'META' %}selected{% endif %}>META</option>
+                    <option value="NARIÑO" {% if dataTColegio[5] == 'NARIÑO' %}selected{% endif %}>NARIÑO</option>
+                    <option value="NORTE DE SANTANDER" {% if dataTColegio[5] == 'NORTE SANTANDER' %}selected{% endif %}>NORTE SANTANDER</option>
+                    <option value="PUTUMAYO" {% if dataTColegio[5] == 'PUTUMAYO' %}selected{% endif %}>PUTUMAYO</option>
+                    <option value="QUINDÍO" {% if dataTColegio[5] == 'QUINDÍO' %}selected{% endif %}>QUINDÍO</option>
+                    <option value="RISARALDA" {% if dataTColegio[5] == 'RISARALDA' %}selected{% endif %}>RISARALDA</option>
+                    <option value="SAN ANDRÉS Y PROVIDENCIA" {% if dataTColegio[5] == 'SAN ANDRÉS Y PROVIDENCIA' %}selected{% endif %}>SAN ANDRÉS Y PROVIDENCIA</option>
+                    <option value="SANTANDER" {% if dataTColegio[5] == 'SANTANDER' %}selected{% endif %}>SANTANDER</option>
+                    <option value="SUCRE" {% if dataTColegio[5] == 'SUCRE' %}selected{% endif %}>SUCRE</option>
+                    <option value="TOLIMA" {% if dataTColegio[5] == 'TOLIMA' %}selected{% endif %}>TOLIMA</option>
+                    <option value="VALLE" {% if dataTColegio[5] == 'VALLE' %}selected{% endif %}>VALLE</option>
+                    <option value="VAUPÉS" {% if dataTColegio[5] == 'VAUPÉS' %}selected{% endif %}>VAUPÉS</option>
+                    <option value="VICHADA" {% if dataTColegio[5] == 'VICHADA' %}selected{% endif %}>VICHADA</option>
+                </select><br />
+                <label>Municipio del colegio</label>
+                <input class="aligned-input" type="text" name="Municipio" size="100" style="margin-bottom: 10px"/ value="{{ dataTColegio[6] }}"><br />
+                <label>Web: </label>
+                <input class="aligned-input" type="text" name="Web" size="100" style="margin-bottom: 10px"/ value="{{ dataTPerfil[1] }}"><br />
+                <label>Calendario del colegio:</label>
+                <select name="Calendario" style="margin-bottom: 10px">
+                    <option value="NULL" selected>NO REGISTRADO</option>
+                    <option value="A" {% if dataTPerfil[2] == 'A' %}selected{% endif %}>A</option>
+                    <option value="B" {% if dataTPerfil[2] == 'B' %}selected{% endif %}>B</option>
+                    <option value="C" {% if dataTPerfil[2] == 'C' %}selected{% endif %}>C</option>
+                </select><br>
+                <label>Rango de aportancia: </label>
+                <select name="rango_aportancia" style="margin-bottom: 10px;">
+                    <option value=" " {% if dataTColegio[8] == " " %}selected{% endif %}> </option>
+                    <option value="1.0" {% if dataTColegio[8] == "1.0" %}selected{% endif %}>1.0</option>
+                    <option value="2.0" {% if dataTColegio[8] == "2.0" %}selected{% endif %}>2.0</option>
+                </select><br>
+                <label>Código ICFES: </label>
+                <input class="aligned-input" type="text" name="codigo_icfes" size="100" style="margin-bottom: 10px"/ value="{{ dataTColegio[9] }}"><br />
+                <label>Código DANE: </label>
+                <input class="aligned-input" type="text" name="codigo_dane" size="100" style="margin-bottom: 10px"/ value="{{ dataTColegio[10] }}"><br />
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>Contacto del Colegio</legend>
+                <label>Correo del colegio:</label>
+                <input class="aligned-input" type="text" name="correo_colegio" size="100" style="margin-bottom: 10px"/ value="{{dataTColegio[0]}}"><br />
+                <label>Nombre de contacto:</label>
+                <input class="aligned-input" type="text" name="encargado_colegio" size="100" style="margin-bottom: 10px"/ value=" {{dataTContactos[0]}} "><br />
+                <label>Teléfono del contacto:</label>
+                <input class="aligned-input" type="text" name="encargado_telefono" maxlength="10" style="margin-bottom: 10px"/ value=" {{dataTContactos[1]}}"><br />
+                <label>Cargo del contacto: </label>
+                <select name="encargado_cargo" style="margin-bottom: 10px;">
+                    <option value="otro" selected>Otro</option>
+                    <option value="rector" {% if dataTContactos[2] == 'rector' %}selected{% endif %}>Rector</option>
+                    <option value="psicologo" {% if dataTContactos[2] == 'psicologo' %}selected{% endif %}>Psicólogo</option>
+                    <option value="coordinador academico" {% if dataTContactos[2] == 'coordinador academico' %}selected{% endif %}>Coordinador académico</option>
+                    <option value="profesor" {% if dataTContactos[2] == 'profesor' %}selected{% endif %}>Profesor</option>
+                    <option value="gestor de comunicaciones" {% if dataTContactos[2] == 'gestor de comunicaciones' %}selected{% endif %}>Gestor de comunicaciones</option>   
+                </select><br />
+                <label>Nombre del rector:</label>
+                <input class="aligned-input" type="text" name="nombre_rector" size="100" style="margin-bottom: 10px;"/ value=" {{dataTPerfil[0]}} "><br />
+            </fieldset>
+            <br>
+        <fieldset>
+            <legend>Datos Orientador</legend>
+            <label>Nombre del orientador:</label>
+            <input type="text" name="nombre_orientador" size="100" style="margin-bottom: 10px;"/ value=" {{dataTContactos[3]}} "><br />
+            <label>Teléfono del Orientador:</label>
+            <input type="text" name="tel_orientador" style="margin-bottom: 10px;"/ value=" {{dataTContactos[5]}} "><br />
+            <label>Correo orientador:</label>
+            <input type="text" name="correo_orientador" size="100" style="margin-bottom: 10px;"/ value= " {{dataTContactos[4]}}">
+        </fieldset>
+        <br />
+        <fieldset>
+            <legend>Notas adicionales para el colegio</legend>
+            <textarea id="nota_adicional" name="nota_adicional" rows="5" cols="155" value="{{ dataTColegio[14] }}">{{ dataTColegio[14] }}</textarea><br>
+        </fieldset><br>
+            <div class="inline-container" style="margin-left: 2%; margin-right: 2%;">
+                <button class="inline-element" type="submit" name="action" value="save_data">Guardar datos</button>
+                <button class="inline-element" type="submit" name="action" value="report_upload">Reportar actualización</button>
+            </div>
+            </form>
+            <br>
+        </div>
+        <div style="display: flex; margin-top: 10px; justify-content: center;" class="specific-page">
+            <div class="button-container">  
+            <form style="margin-left: 10px" action="{{ url_for('load_school_awards', email_admin = email_admin) }}" method="POST">
+                <button class="special-button" type="submit">Reconocimientos y Eventos</button>
+            </form>
+            <form style="margin-left: 10px;" action="{{ url_for('load_teachers_data') }}" method="POST">
+                <button class="special-button" type="submit">Profesores del colegio</button>
+            </form>
+            <form style="margin-left: 10px" action="{{ url_for('load_dates', email_admin = email_admin) }}" method="POST">
+                <button class="special-button" type="submit">Fechas del colegio</button>
+            </form>
+            <form style="margin-left: 10px" action="{{ url_for('load_modelo_ONU', email_admin = email_admin)}}" method="POST">
+                <button class="special-button" type="submit">Modelo ONU</button>
+            </form>
+            <form style="margin-left: 10px" action="{{ url_for('load_uniandes_events', email_admin = email_admin)}}" method="POST">
+                <button class="special-button" type="submit">Eventos con uniandes</button>
+            </form>
+            <form style="margin-left: 10px" action="{{ url_for('load_history_contact', email_admin = email_admin)}}" method="POST">
+                <button class="special-button" type="submit">Historial de contacto</button>
+            </form>
+        </div></div></div>
+        <form style="flex: 1;" action="{{ url_for('open_admin_menu', email_admin = email_admin)}}" method="POST">
+            <button class="Volver-bottom" type="submit" style="float:right">Volver a menú de administrador</button>
+        </form>
+    </body>
+</html>

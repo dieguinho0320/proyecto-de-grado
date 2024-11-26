@@ -1,0 +1,31 @@
+body{
+    background: url(/static/Images/IMAG3_EW.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+}
+button {
+    margin-bottom: 10px;
+    height: 25px;
+    color: white; 
+    background-color: #4500CF; 
+    justify-content: center;
+    border-radius: 10px;
+    display: block;
+    width: 50%;
+    margin: 0 auto;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button:hover{
+    background-color: #9966ff;
+}
+.inline-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='General_lists.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">    
+    <title>Filtro para colegios</title>
+</head>
+<body>
+    <h1 align="center">Busqueda filtrada: Colegios</h1>
+    <hr>
+    <div class="inline-container" style="margin-left: 2%; margin: 25px; background-color: white; padding: 10px; border: 1px solid black; border-radius: 2px;">
+    <form action="{{ url_for('busqueda_filtrada_colegios') }}" method="POST">
+        <label>Estado del colegio: </label>
+        <select name="status" style="margin-bottom:  10px">
+            <option value="ACTIVO" selected>ACTIVO</option>
+            <option value="CERRADO">CERRADO</option>
+        </select><br>
+        <label>Departamento: </label>
+        <select name="Departamento_Colegio" style="margin-bottom:  10px">
+            <option value="NULL" selected>TODOS LOS DEPARTAMENTOS</option>
+            <option value="BOGOTÁ D.C.">BOGOTÁ D.C.</option>
+            <option value="AMAZONAS">AMAZONAS</option>
+            <option value="ANTIOQUÍA">ANTIOQUÍA</option>
+            <option value="ARAUCA">ARAUCA</option>
+            <option value="ATLÁNTICO">ATLÁNTICO</option>
+            <option value="BOLÍVAR">BOLÍVAR</option>
+            <option value="BOYACÁ">BOYACÁ</option>
+            <option value="CALDAS">CALDAS</option>
+            <option value="CAQUETÁ">CAQUETÁ</option>
+            <option value="CASANARE">CASANARE</option>
+            <option value="CAUCA">CAUCA</option>
+            <option value="CESAR">CESAR</option>
+            <option value="CHOCÓ">CHOCÓ</option>
+            <option value="CÓRDOBA">CÓRDOBA</option>
+            <option value="CUNDINAMARCA">CUNDINAMARCA</option>
+            <option value="GUAINÍA">GUAINÍA</option>
+            <option value="GUAVIARE">GUAVIARE</option>
+            <option value="HUILA">HUILA</option>
+            <option value="LA GUAJIRA">LA GUAJIRA</option>
+            <option value="MAGDALENA">MAGDALENA</option>
+            <option value="META">META</option>
+            <option value="NARIÑO">NARIÑO</option>
+            <option value="NORTE DE SANTANDER">NORTE SANTANDER</option>
+            <option value="PUTUMAYO">PUTUMAYO</option>
+            <option value="QUINDÍO">QUINDÍO</option>
+            <option value="RISARALDA">RISARALDA</option>
+            <option value="SAN ANDRÉS Y PROVIDENCIA">SAN ANDRÉS Y PROVIDENCIA</option>
+            <option value="SANTANDER">SANTANDER</option>
+            <option value="SUCRE">SUCRE</option>
+            <option value="TOLIMA">TOLIMA</option>
+            <option value="VALLE">VALLE</option>
+            <option value="VAUPÉS">VAUPÉS</option>
+            <option value="VICHADA">VICHADA</option>
+        </select><br />
+        <label>Rango de aportancia: </label>
+        <select name="Rango_Aportancia" style="margin-bottom:  10px">
+            <option value="NULL" selected>TODOS LOS RANGOS</option>
+            <option value=" "> </option>
+            <option value="1.0">1.0</option>
+            <option value="2.0">2.0</option>
+            <option value="1.0 - 2.0">1.0 - 2.0</option>
+        </select>
+        <label>Calendario: </label>
+        <select name="Calendario" style="margin-bottom:  10px">
+            <option value="NULL" selected> </option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+        </select><br>
+        <label>Gestor del colegio: </label>
+        <select name="encargado_uniandes" style="margin-bottom: 10px;">
+            <option value="NULL" selected>TODOS LOS PROFESIONALES</option>
+            <option value="NO ASIGNADO">NO ASIGNADO</option>
+            {% for profesional in list_profesionales %}
+                <option value="{{ profesional[0] }}">{{ profesional[0] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <fieldset style="margin-bottom: 10px;">
+            <legend style="font-size: 15px;">Filtros de fechas</legend>
+            <label>Atendidos después de: </label><input type="date" name="fecha_atendidos_despues" style="margin-bottom: 10px"><br>
+            <label>Atendidos antes de: </label><input type="date" name="fecha_atendidos_antes" style="margin-bottom: 10px"><br>
+            <label>Actualizados después de: </label><input type="date" name="fecha_actualizados_despues" style="margin-bottom: 10px"><br>
+            <label>Actualizados antes de: </label><input type="date" name="fecha_actualizados_antes" style="margin-bottom: 10px"><br>
+        </fieldset>
+        <button type="submit">Realizar búsqueda filtrada</button>
+    </form>
+    <form style="flex: 1;" action="{{ url_for('open_admin_menu', email_admin = email_admin)}}" method="POST">
+        <button class="Volver-button" type="submit">Volver a menú de administrador</button>
+    </form>
+    </div>
+    <hr>
+    {% if response==1 %}
+    <form action="{{ url_for('descargar_excel') }}"  method="POST" class="form-descargar-excel">
+        <input type="hidden" name="data" id="data_result_search" value="{{ data_result_search }}">
+        <input type="hidden" name="list_columnas" value="{{ list_columnas }}">
+        <label class="inline-elements" style="margin-left: 2%;">Escriba el nombre del archivo: </label>
+        <input name="name_file" style="margin-top: 3px; margin-left: 2px;">
+        <label >.xlsx</label><br>
+        <input type="hidden" name="keyword" value="Colegios">
+        <button class="form-descargar-excel_button" type="submit" name="action" value="Descargar">Descargar como Excel</button>        
+    </form><br>
+    <p style="margin-left: 2%;">Número de coincidencias en búsqueda: {{ num_coincidences }}</p>
+    <table border = "1" style="margin-left: 25px; margin-right: 25px;">
+        <thead>
+            <tr>
+                {% for columna in list_columnas%}
+                <th>{{ columna }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for i, fila in enumerate(result_search) %}
+            <tr>
+                {% for j, elemento in enumerate(fila) %}
+                    <td style="max-width: 300px;">{{ elemento }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}<br>
+    <script>
+    {% if result_search is defined and result_search %}
+        var data = {{ result_search | tojson | safe }};
+        var matrixJson = JSON.stringify(data);
+        document.getElementById('data_result_search').value = matrixJson;
+    {% endif %}    
+    </script>
+</body>
+</html>

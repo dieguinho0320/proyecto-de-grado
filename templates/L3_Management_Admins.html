@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar profesionales</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='General_Table&Filter.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <style>
+        body {
+            background: url(/static/Images/IMAG6.png);
+            font-family: Arial, sans-serif;
+        }
+        form {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            justify-content: flex-start;
+        }
+        input, select {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="specific-page">
+        <h1 align="center">Cambio de clase para gestores</h1>
+        <div class="contenedor">
+        {% for Encargado in lista_encargados %}
+            <form action="{{ url_for('manage_professionals')}}" method="POST">
+                <input type="text" name="Encargado" value="{{ Encargado[0] }}" readonly>
+                <select name="Clase_gestor">
+                    <option value="superadmin" {% if Encargado[1] == 'superadmin' %}selected{% endif %}>superadmin</option>
+                    <option value="admin" {% if Encargado[1] == 'admin' %}selected{% endif %}>admin</option>
+                </select>
+                <div class="button-container">
+                    <button style="border-radius: 5px;" type="submit" name="action" value="Cambiar estatus">Cambiar clase</button>
+                    <button style="border-radius: 5px;" type="submit" name="action" value="Eliminar profesional">Eliminar profesional</button>
+                    <button style="border-radius: 5px;" type="submit" name="action" value="Restablecer contrasena">Recuperar contraseña de profesional</button>
+                </div>
+            </form>
+        {% endfor %}
+        </div>
+    </div>
+    <form style="flex: 1; margin-bottom: 10px;" action="{{ url_for('open_admin_menu', email_admin = email_admin)}}" method="POST">
+        <button type="submit">Volver a menú de administrador</button>
+    </form>    
+</body>
+</html>

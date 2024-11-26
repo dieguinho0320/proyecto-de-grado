@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='EW.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <title>Response</title>
+    <style>
+        /* Estilos para el modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 1001;
+        }
+
+        /* Estilos para los botones */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-overlay" id="ventanaEmergente">
+        <div class="modal-content">
+            {% if response==1 %}
+                <h2>¡Contraseña incorrecta!</h2>
+                <p>La contraseña ingresada no coincide con la contraseña registrada</p>
+            {% elif response==2 %}
+                <h2>¡Usuario no encontrado en la base de datos!</h2>
+                <p> El correo ingresado no se encuentra registrado en la base de datos
+                </p>
+            {% endif %}
+            <div class="button-container">
+                <button onclick="cerrarVentana()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mostrarVentana() {
+            var ventana = document.getElementById('ventanaEmergente');
+            ventana.style.display = 'block';
+        }
+
+        function cerrarVentana() {
+            var ventana = document.getElementById('ventanaEmergente');
+            ventana.style.display = 'none';
+            window.location.href = "/inicio_sesion";
+        }
+
+        window.onload = mostrarVentana;
+    </script>
+</body>
+</html>

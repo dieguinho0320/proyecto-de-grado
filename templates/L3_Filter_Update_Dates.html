@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='General_lists.css')}}">
+    <title>Búsqueda filtrada: Fechas de actualización</title>
+</head>
+<body>
+    <h1 align="center">Busqueda filtrada por fechas de actualización</h1>
+    <hr>
+    <div class="inline-container" style="margin: 25px; background-color: white; padding: 10px; border: 1px solid black; border-radius: 2px;">
+        <form action="{{ url_for('busqueda_filtrada_fecha_actualizacion') }}" method="POST">
+            <label>Después de: </label>
+            <input type="date" name="start_date"><br>
+            <label>Antes de: </label>
+            <input type="date" name="final_date"><br>
+            <button type="submit">Realizar búsqueda fitrada</button>
+        </form>
+        <form style="flex: 1;" action="{{ url_for('open_admin_menu', email_admin = email_admin)}}" method="POST">
+            <button type="submit" class="Volver-button">Volver a menú de administrador</button>
+        </form>    
+    </div>
+    <hr>
+    <div>
+        {% if response==1 %}
+            <form action="{{ url_for('descargar_excel') }}" class="form-descargar-excel" method="POST">
+                <input type="hidden" name="data" id="data_result_search" value="{{ data_result_search }}">
+                <label style="margin-left: 2%;">Escriba el nombre del archivo: </label>
+                <input name="name_file">
+                <input type="hidden" name="keyword" value="Fechas">
+                <label style="margin-right: 2%;">.xlsx</label><br>
+                <div class="button-container">
+                    <button class="form-descargar-excel_button" type="submit" name="action" value="Descargar">Descargar como Excel</button>        
+                </div>
+            </form><br>
+            <p style="margin-left: 2%; margin-top: 0px;">Número de coincidencias en búsqueda: {{ num_coincidences }}</p>
+                <table border="1">
+                <thead>
+                    <tr>
+                        {% for columna in list_columnas %}
+                            <th>{{ columna }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i, fila in enumerate(result_search) %}
+                    <tr>
+                        {% for j, elemento in enumerate(fila) %}
+                            <td>{{ elemento }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    <script>
+        {% if result_search is defined and result_search %}
+            var data = {{ result_search | tojson | safe }};
+            var matrixJson = JSON.stringify(data);
+            document.getElementById('data_result_search').value = matrixJson;
+        {% endif %}    
+    </script> 
+
+</body>
+</html>
