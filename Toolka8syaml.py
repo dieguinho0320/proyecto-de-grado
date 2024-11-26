@@ -77,7 +77,7 @@ def signin():
 def register_new_user():
     email = request.form["email"].upper()
     clase = "admin"
-    nombre_usuario = request.form["nombre_colegio"]
+    nombre_usuario = request.form["nombre_k8s"]
     nombre_usuario = nombre_usuario.upper()
     password = request.form["password"]
     confirm_password = request.form["confirm_password"]
@@ -166,11 +166,11 @@ def sing_off():
 ###################################        SCHOOL_INTERFACE       ###########################################
 #############################################################################################################
 
-@app.route('/editar/<nombre_colegio>', methods=['GET','POST'])
-def load_school_data(nombre_colegio):
+@app.route('/editar/<nombre_k8s>', methods=['GET','POST'])
+def load_school_data(nombre_k8s):
 
     email_admin = session["email_admin"]
-    session["main_school_key"] = nombre_colegio
+    session["main_school_key"] = nombre_k8s
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
@@ -178,34 +178,34 @@ def load_school_data(nombre_colegio):
         lista_encargados = cursor.fetchall()
     
 
-    dataTColegio, dataTContactos, dataTPerfil = get_school_data(nombre_colegio = nombre_colegio)
+    dataTk8s, dataTContactos, dataTPerfil = get_school_data(nombre_k8s = nombre_k8s)
 
 
-    return render_template('L2_Main_School_Page.html', nombre_colegio=nombre_colegio, dataTColegio=dataTColegio, dataTContactos=dataTContactos, dataTPerfil=dataTPerfil, email_admin = email_admin, lista_encargados = lista_encargados)
+    return render_template('L2_Main_School_Page.html', nombre_k8s=nombre_k8s, dataTk8s=dataTk8s, dataTContactos=dataTContactos, dataTPerfil=dataTPerfil, email_admin = email_admin, lista_encargados = lista_encargados)
 
 @app.route('/Actualizar_Datos', methods=['GET','POST'])
 def upload_school_data():
 
-    correo_colegio=request.form["correo_colegio"]
-    correo_colegio = actualizar_correo(correo_colegio)
-    nombre_colegio=request.form["nombre_colegio"]
+    correo_k8s=request.form["correo_k8s"]
+    correo_k8s = actualizar_correo(correo_k8s)
+    nombre_k8s=request.form["nombre_k8s"]
     if session["class"]=="superadmin":
         status = request.form["status"]
     elif session["class"]=="admin":
         status = request.form["status"]
     encargado_uniandes=request.form["encargado_uniandes"]
-    dir_colegio=request.form["dir_colegio"]
-    tel_colegio=request.form["tel_colegio"]
-    Departamento_Colegio=request.form["Departamento_Colegio"]
+    dir_k8s=request.form["dir_k8s"]
+    tel_k8s=request.form["tel_k8s"]
+    Departamento_k8s=request.form["Departamento_k8s"]
     Municipio=request.form["Municipio"]
     Web=request.form["Web"]
     Calendario=request.form["Calendario"]
     Rango_aportancia = request.form["rango_aportancia"]
     Codigo_ICFES = request.form["codigo_icfes"]
     Codigo_DANE = request.form["codigo_dane"]
-    estado_colegio = request.form['status']
+    estado_k8s = request.form['status']
 
-    encargado_colegio = request.form["encargado_colegio"]
+    encargado_k8s = request.form["encargado_k8s"]
     encargado_telefono = request.form["encargado_telefono"]
     encargado_cargo = request.form["encargado_cargo"]
     nombre_rector = request.form["nombre_rector"]
@@ -215,32 +215,32 @@ def upload_school_data():
     correo_orientador = request.form["correo_orientador"]
     nota_adicional = request.form["nota_adicional"]
 
-    if estado_colegio=='ELIMINAR':
+    if estado_k8s=='ELIMINAR':
         return render_template('L3_EW_Delete_School.html', response=0)
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("UPDATE TColegio SET correo_colegio=%s ,encargado_uniandes=%s, tel_colegio=%s, dir_colegio=%s, departamento=%s, municipio=%s, rango_aportancia=%s, cod_icfes=%s, cod_dane=%s, status=%s, nota_adicional=%s WHERE nombre_colegio=%s", (correo_colegio, encargado_uniandes, tel_colegio,dir_colegio,Departamento_Colegio,Municipio, Rango_aportancia, Codigo_ICFES, Codigo_DANE, status, nota_adicional, nombre_colegio) )
-        cursor.execute("UPDATE TColegio SET nombre_contacto=%s, telefono_contacto=%s, cargo_contacto=%s, nombre_orientador=%s, correo_orientador=%s, tel_orientador=%s WHERE nombre_colegio=%s", (encargado_colegio, encargado_telefono, encargado_cargo, nombre_orientador, correo_orientador, tel_orientador, nombre_colegio) )
-        cursor.execute("UPDATE TColegio SET nombre_Rector=%s, web=%s, calendario=%s WHERE nombre_colegio=%s", (nombre_rector,Web,Calendario,nombre_colegio) )
+        cursor.execute("UPDATE Tk8s SET correo_k8s=%s ,encargado_uniandes=%s, tel_k8s=%s, dir_k8s=%s, departamento=%s, municipio=%s, rango_aportancia=%s, cod_icfes=%s, cod_dane=%s, status=%s, nota_adicional=%s WHERE nombre_k8s=%s", (correo_k8s, encargado_uniandes, tel_k8s,dir_k8s,Departamento_k8s,Municipio, Rango_aportancia, Codigo_ICFES, Codigo_DANE, status, nota_adicional, nombre_k8s) )
+        cursor.execute("UPDATE Tk8s SET nombre_contacto=%s, telefono_contacto=%s, cargo_contacto=%s, nombre_orientador=%s, correo_orientador=%s, tel_orientador=%s WHERE nombre_k8s=%s", (encargado_k8s, encargado_telefono, encargado_cargo, nombre_orientador, correo_orientador, tel_orientador, nombre_k8s) )
+        cursor.execute("UPDATE Tk8s SET nombre_Rector=%s, web=%s, calendario=%s WHERE nombre_k8s=%s", (nombre_rector,Web,Calendario,nombre_k8s) )
         db.commit()
 
     action = request.form["action"]
     if action=="report_upload":
-        actualizar_fecha(nombre_colegio=nombre_colegio)
-        return render_template('L3_EW_UpdateData.html', nombre_colegio=nombre_colegio, response=0)
+        actualizar_fecha(nombre_k8s=nombre_k8s)
+        return render_template('L3_EW_UpdateData.html', nombre_k8s=nombre_k8s, response=0)
 
-    return render_template('L3_EW_UpdateData.html', nombre_colegio=nombre_colegio, response=1)
+    return render_template('L3_EW_UpdateData.html', nombre_k8s=nombre_k8s, response=1)
 
-@app.route('/Eliminar_colegio', methods=['GET','POST'])
+@app.route('/Eliminar_k8s', methods=['GET','POST'])
 def delete_school():
-    nombre_colegio = session['main_school_key']
+    nombre_k8s = session['main_school_key']
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute('DELETE FROM TColegio WHERE nombre_colegio=%s',(nombre_colegio, ))
-        cursor.execute('DELETE FROM TMONU WHERE nombre_colegio=%s',(nombre_colegio, ))
-        cursor.execute('DELETE FROM TProfesores WHERE colegio_profesor=%s',(nombre_colegio, ))
-        cursor.execute('DELETE FROM TUniandes_Events WHERE nombre_colegio=%s',(nombre_colegio, ))
+        cursor.execute('DELETE FROM Tk8s WHERE nombre_k8s=%s',(nombre_k8s, ))
+        cursor.execute('DELETE FROM TMONU WHERE nombre_k8s=%s',(nombre_k8s, ))
+        cursor.execute('DELETE FROM TProfesores WHERE k8s_profesor=%s',(nombre_k8s, ))
+        cursor.execute('DELETE FROM TUniandes_Events WHERE nombre_k8s=%s',(nombre_k8s, ))
         db.commit()
 
     return render_template('L3_EW_Delete_School.html', response=1)
@@ -252,7 +252,7 @@ def load_school_awards():
     main_school_key = session["main_school_key"]
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_premios FROM TColegio WHERE nombre_colegio LIKE %s", (main_school_key, ))
+        cursor.execute("SELECT nombre_premios FROM Tk8s WHERE nombre_k8s LIKE %s", (main_school_key, ))
         raw_dataawards = cursor.fetchall()
 
     if raw_dataawards!=[]:
@@ -261,7 +261,7 @@ def load_school_awards():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_eventos, area_eventos, descripcion_eventos FROM TColegio WHERE nombre_colegio LIKE %s", (main_school_key, ))
+        cursor.execute("SELECT nombre_eventos, area_eventos, descripcion_eventos FROM Tk8s WHERE nombre_k8s LIKE %s", (main_school_key, ))
         raw_dataevents = cursor.fetchall()
 
     if raw_dataevents!=[]:
@@ -270,10 +270,10 @@ def load_school_awards():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT modelo_ONU FROM TColegio WHERE nombre_colegio LIKE %s", (main_school_key, ))
+        cursor.execute("SELECT modelo_ONU FROM Tk8s WHERE nombre_k8s LIKE %s", (main_school_key, ))
         modeloONU = cursor.fetchall()
 
-    return render_template('L3_School_Page_AwardsEvents.html', nombre_colegio=main_school_key,List_Awards=dataawards, List_Events=dataevents, modeloONU = modeloONU)
+    return render_template('L3_School_Page_AwardsEvents.html', nombre_k8s=main_school_key,List_Awards=dataawards, List_Events=dataevents, modeloONU = modeloONU)
 
 @app.route('/Crear Reconocimiento', methods=['POST'])
 def create_award():
@@ -282,7 +282,7 @@ def create_award():
     list_awards = []
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_premios FROM TColegio WHERE nombre_colegio LIKE %s", ( main_school_key,))
+        cursor.execute("SELECT nombre_premios FROM Tk8s WHERE nombre_k8s LIKE %s", ( main_school_key,))
         raw_list_awards = cursor.fetchall()
     
     if raw_list_awards != []:
@@ -296,11 +296,11 @@ def create_award():
     if raw_list_awards == [(None, )]:
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO TColegio (nombre_colegio, nombre_premios) VALUES (%s, %s)",(main_school_key, list_awards))
+            cursor.execute("INSERT INTO Tk8s (nombre_k8s, nombre_premios) VALUES (%s, %s)",(main_school_key, list_awards))
     elif raw_list_awards != [(None, )]:
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute("UPDATE TColegio SET nombre_premios=%s WHERE nombre_colegio=%s",(list_awards, main_school_key))
+            cursor.execute("UPDATE Tk8s SET nombre_premios=%s WHERE nombre_k8s=%s",(list_awards, main_school_key))
             db.commit()
 
     return load_school_awards()
@@ -312,7 +312,7 @@ def delete_award():
     list_awards = []
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_premios FROM TColegio WHERE nombre_colegio LIKE %s", ( main_school_key,))
+        cursor.execute("SELECT nombre_premios FROM Tk8s WHERE nombre_k8s LIKE %s", ( main_school_key,))
         raw_list_awards = cursor.fetchall()
     
     list_awards = raw_list_awards[0][0]
@@ -324,7 +324,7 @@ def delete_award():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("UPDATE TColegio SET nombre_premios=%s WHERE nombre_colegio=%s",(list_awards, main_school_key))
+        cursor.execute("UPDATE Tk8s SET nombre_premios=%s WHERE nombre_k8s=%s",(list_awards, main_school_key))
         db.commit()
 
     return load_school_awards()
@@ -333,7 +333,7 @@ def delete_award():
 def create_event():
     main_school_key = session["main_school_key"]
     name_event = request.form["name_event"].upper()
-    area = request.form["Área del Colegio"].upper()
+    area = request.form["Área del k8s"].upper()
     description = request.form["description"].upper()
 
     list_name_events = []
@@ -342,7 +342,7 @@ def create_event():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_eventos, area_eventos, descripcion_eventos FROM TColegio WHERE nombre_colegio LIKE %s", (main_school_key, ))
+        cursor.execute("SELECT nombre_eventos, area_eventos, descripcion_eventos FROM Tk8s WHERE nombre_k8s LIKE %s", (main_school_key, ))
         raw_dataevents = cursor.fetchall()
 
     if raw_dataevents[0][0] != [] :
@@ -364,11 +364,11 @@ def create_event():
     if raw_dataevents[0][0] == []:
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO TColegio (nombre_colegio, nombre_eventos, area_eventos, descripcion_eventos) VALUES (%s, %s, %s, %s)",(main_school_key, list_name_events, list_area_events, list_description_events))
+            cursor.execute("INSERT INTO Tk8s (nombre_k8s, nombre_eventos, area_eventos, descripcion_eventos) VALUES (%s, %s, %s, %s)",(main_school_key, list_name_events, list_area_events, list_description_events))
     elif raw_dataevents[0][0] != []:
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute("UPDATE TColegio SET nombre_eventos=%s, area_eventos=%s, descripcion_eventos=%s  WHERE nombre_colegio = %s", (list_name_events, list_area_events, list_description_events, main_school_key))
+            cursor.execute("UPDATE Tk8s SET nombre_eventos=%s, area_eventos=%s, descripcion_eventos=%s  WHERE nombre_k8s = %s", (list_name_events, list_area_events, list_description_events, main_school_key))
             db.commit()
     
     return load_school_awards()
@@ -384,7 +384,7 @@ def delete_event():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_eventos, area_eventos, descripcion_eventos FROM TColegio WHERE nombre_colegio LIKE %s", (main_school_key, ))
+        cursor.execute("SELECT nombre_eventos, area_eventos, descripcion_eventos FROM Tk8s WHERE nombre_k8s LIKE %s", (main_school_key, ))
         raw_dataevents = cursor.fetchall()
 
     raw_dataevents = raw_dataevents[0]
@@ -403,7 +403,7 @@ def delete_event():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("UPDATE TColegio SET nombre_eventos=%s, area_eventos=%s, descripcion_eventos=%s  WHERE nombre_colegio = %s", (list_name_events, list_area_events, list_description_events, main_school_key))
+        cursor.execute("UPDATE Tk8s SET nombre_eventos=%s, area_eventos=%s, descripcion_eventos=%s  WHERE nombre_k8s = %s", (list_name_events, list_area_events, list_description_events, main_school_key))
         db.commit()
     
     return load_school_awards()
@@ -414,7 +414,7 @@ def load_dates():
     main_school_key = session["main_school_key"]
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_fecha,fecha FROM TColegio WHERE nombre_colegio=%s", (main_school_key, ))
+        cursor.execute("SELECT nombre_fecha,fecha FROM Tk8s WHERE nombre_k8s=%s", (main_school_key, ))
         raw_datadates = cursor.fetchall()[0]
 
     if raw_datadates != []:
@@ -424,7 +424,7 @@ def load_dates():
 
         datadates = [nombre_fechas, fechas]
     
-    return render_template('L3_School_Page_Dates.html', nombre_colegio=main_school_key,List_Dates=datadates)
+    return render_template('L3_School_Page_Dates.html', nombre_k8s=main_school_key,List_Dates=datadates)
 
 
 @app.route('/Editar_fecha', methods=["POST"])
@@ -438,7 +438,7 @@ def edit_date():
     if action=="update":
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute("SELECT nombre_fecha, fecha FROM TColegio WHERE nombre_colegio LIKE %s", (main_school_key, ))
+            cursor.execute("SELECT nombre_fecha, fecha FROM Tk8s WHERE nombre_k8s LIKE %s", (main_school_key, ))
             raw_datadates = cursor.fetchall()
 
         raw_datadates = raw_datadates[0]
@@ -452,13 +452,13 @@ def edit_date():
 
         with DatabaseConnection() as db:
                 cursor = db.cursor()
-                cursor.execute("UPDATE TColegio SET fecha=%s WHERE nombre_colegio = %s AND nombre_fecha = %s", (fechas, main_school_key, nombre_fechas))
+                cursor.execute("UPDATE Tk8s SET fecha=%s WHERE nombre_k8s = %s AND nombre_fecha = %s", (fechas, main_school_key, nombre_fechas))
                 db.commit()
 
     if action=="delete":
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute("SELECT nombre_fecha, fecha FROM TColegio WHERE nombre_colegio LIKE %s", (main_school_key, ))
+            cursor.execute("SELECT nombre_fecha, fecha FROM Tk8s WHERE nombre_k8s LIKE %s", (main_school_key, ))
             raw_datadates = cursor.fetchall()
 
         raw_datadates = raw_datadates[0]
@@ -473,7 +473,7 @@ def edit_date():
 
         with DatabaseConnection() as db:
                 cursor = db.cursor()
-                cursor.execute("UPDATE TColegio SET fecha=%s, nombre_fecha=%s WHERE nombre_colegio = %s", (fechas, nombre_fechas, main_school_key))
+                cursor.execute("UPDATE Tk8s SET fecha=%s, nombre_fecha=%s WHERE nombre_k8s = %s", (fechas, nombre_fechas, main_school_key))
                 db.commit()
 
     return load_dates()
@@ -488,7 +488,7 @@ def create_date():
     fechas = []
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_fecha, fecha FROM TColegio WHERE nombre_colegio LIKE %s ", (main_school_key, ))
+        cursor.execute("SELECT nombre_fecha, fecha FROM Tk8s WHERE nombre_k8s LIKE %s ", (main_school_key, ))
         raw_datadates = cursor.fetchall()
             
     if raw_datadates[0][0] != []:
@@ -506,7 +506,7 @@ def create_date():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("UPDATE TColegio SET nombre_fecha = %s, fecha = %s WHERE nombre_colegio = %s", (nombre_fechas, fechas, main_school_key))
+        cursor.execute("UPDATE Tk8s SET nombre_fecha = %s, fecha = %s WHERE nombre_k8s = %s", (nombre_fechas, fechas, main_school_key))
         db.commit()
 
     return load_dates()
@@ -514,10 +514,10 @@ def create_date():
 @app.route('/Edición_de_profesores', methods=['POST','GET'])
 def load_teachers_data():
 
-    colegio_profesor = session["main_school_key"]
+    k8s_profesor = session["main_school_key"]
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM TProfesores WHERE colegio_profesor=%s", (colegio_profesor, ))
+        cursor.execute("SELECT * FROM TProfesores WHERE k8s_profesor=%s", (k8s_profesor, ))
         datos_profesores = cursor.fetchall()
 
     return render_template('L3_School_Page_Teachers.html', data = datos_profesores)
@@ -525,7 +525,7 @@ def load_teachers_data():
 @app.route('/Edición_de_profesores/Crear_profesor', methods=['POST','GET'])
 def create_teacher():
 
-    colegio_profesor = session["main_school_key"]
+    k8s_profesor = session["main_school_key"]
     nombre_profesor = request.form["teacher_name"]
     area_profesor = request.form["Area_profesor"]
     enfasis_profesor = request.form["enfasis_profesor"]
@@ -534,7 +534,7 @@ def create_teacher():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("INSERT INTO TProfesores (colegio_profesor, nombre_profesor, area_profesor, enfasis_profesor, telefono_profesor, correo_profesor) VALUES (%s, %s, %s, %s, %s, %s)", (colegio_profesor, nombre_profesor, area_profesor, enfasis_profesor, telefono_profesor, correo_profesor))
+        cursor.execute("INSERT INTO TProfesores (k8s_profesor, nombre_profesor, area_profesor, enfasis_profesor, telefono_profesor, correo_profesor) VALUES (%s, %s, %s, %s, %s, %s)", (k8s_profesor, nombre_profesor, area_profesor, enfasis_profesor, telefono_profesor, correo_profesor))
         db.commit()
  
     return redirect(url_for('load_teachers_data'))
@@ -542,21 +542,21 @@ def create_teacher():
 @app.route('/Edición_de_profesores/Eliminar_profesor', methods=["GET","POST"])
 def delete_teacher():
 
-    colegio_profesor = request.form['colegio_profesor']
+    k8s_profesor = request.form['k8s_profesor']
     nombre_profesor = request.form['nombre_profesor']
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("DELETE FROM TProfesores WHERE colegio_profesor = %s AND nombre_profesor = %s", (colegio_profesor, nombre_profesor, ))
+        cursor.execute("DELETE FROM TProfesores WHERE k8s_profesor = %s AND nombre_profesor = %s", (k8s_profesor, nombre_profesor, ))
         db.commit()
 
     return redirect(url_for('load_teachers_data'))
 
 @app.route('/Información_Modelo_ONU', methods=['POST'])
 def load_modelo_ONU():
-    nombre_colegio = session["main_school_key"]
+    nombre_k8s = session["main_school_key"]
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM TMONU WHERE nombre_colegio=%s",(nombre_colegio ,))
+        cursor.execute("SELECT * FROM TMONU WHERE nombre_k8s=%s",(nombre_k8s ,))
         data = cursor.fetchall()[0]
 
     return render_template("L3_School_Page_ModeloONU.html", data=data)
@@ -573,18 +573,18 @@ def update_MONU_data():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT correo_colegio FROM TColegio WHERE nombre_colegio=%s", (main_school_key, ))
-        correo_colegio = cursor.fetchall()
+        cursor.execute("SELECT correo_k8s FROM Tk8s WHERE nombre_k8s=%s", (main_school_key, ))
+        correo_k8s = cursor.fetchall()
 
-    correo_colegio = str(correo_colegio)
+    correo_k8s = str(correo_k8s)
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("UPDATE TMONU SET correo_colegio=%s, status_MONU=%s, nombre_MONU=%s, nombre_encargado_MONU=%s, tel_encargado_MONU=%s, correo_encargado_MONU=%s, fecha_MONU=%s  WHERE nombre_colegio LIKE %s", (correo_colegio, status_MONU, nombre_MONU, nombre_encargadoMONU, tel_encargadoMONU, correo_encargadoMONU, fecha_MONU, main_school_key, ))
+        cursor.execute("UPDATE TMONU SET correo_k8s=%s, status_MONU=%s, nombre_MONU=%s, nombre_encargado_MONU=%s, tel_encargado_MONU=%s, correo_encargado_MONU=%s, fecha_MONU=%s  WHERE nombre_k8s LIKE %s", (correo_k8s, status_MONU, nombre_MONU, nombre_encargadoMONU, tel_encargadoMONU, correo_encargadoMONU, fecha_MONU, main_school_key, ))
         db.commit()
 
     return load_modelo_ONU()
 
-@app.route('/Eventos_uniandes_colegio', methods=['POST'])
+@app.route('/Eventos_uniandes_k8s', methods=['POST'])
 def load_uniandes_events():
     main_school_key = session["main_school_key"]
     
@@ -594,7 +594,7 @@ def load_uniandes_events():
     
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT nombre_colegio, tipo_feria_uniandes, profesional_feria_uniandes, fecha_feria_uniandes, num_atendidos, descripcion_feria_uniandes  FROM TUniandes_Events WHERE nombre_colegio=%s", (main_school_key, ))
+        cursor.execute("SELECT nombre_k8s, tipo_feria_uniandes, profesional_feria_uniandes, fecha_feria_uniandes, num_atendidos, descripcion_feria_uniandes  FROM TUniandes_Events WHERE nombre_k8s=%s", (main_school_key, ))
         data_uniandes_events = cursor.fetchall()
         cursor.execute("SELECT nombre_usuario FROM TUser")
         list_profesionales = cursor.fetchall()
@@ -615,7 +615,7 @@ def create_uniandes_event():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("INSERT INTO TUniandes_Events (nombre_colegio, num_atendidos, tipo_feria_uniandes, profesional_feria_uniandes, fecha_feria_uniandes, descripcion_feria_uniandes) VALUES (%s, %s, %s, %s, %s, %s)", (main_school_key, num_atendidos, nombre_feria_uniandes, profesional_feria_uniandes, fecha_feria_uniandes, descripcion_feria_uniandes))
+        cursor.execute("INSERT INTO TUniandes_Events (nombre_k8s, num_atendidos, tipo_feria_uniandes, profesional_feria_uniandes, fecha_feria_uniandes, descripcion_feria_uniandes) VALUES (%s, %s, %s, %s, %s, %s)", (main_school_key, num_atendidos, nombre_feria_uniandes, profesional_feria_uniandes, fecha_feria_uniandes, descripcion_feria_uniandes))
         db.commit()
     
     actualizar_ultima_atencion()
@@ -630,7 +630,7 @@ def delete_uniandes_event():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("DELETE FROM TUniandes_Events WHERE nombre_colegio=%s AND fecha_feria_uniandes=%s AND tipo_feria_uniandes=%s", (main_school_key, fecha_feria_uniandes,tipo_feria_uniandes ,))
+        cursor.execute("DELETE FROM TUniandes_Events WHERE nombre_k8s=%s AND fecha_feria_uniandes=%s AND tipo_feria_uniandes=%s", (main_school_key, fecha_feria_uniandes,tipo_feria_uniandes ,))
         db.commit()
     actualizar_ultima_atencion()
     return load_uniandes_events()
@@ -640,7 +640,7 @@ def load_history_contact():
     main_school_key = session["main_school_key"]
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM THISTORY_CONTACT WHERE nombre_colegio = %s", (main_school_key, ))
+        cursor.execute("SELECT * FROM THISTORY_CONTACT WHERE nombre_k8s = %s", (main_school_key, ))
         history_contact = cursor.fetchall()
         
     return render_template('L3_School_Page_History_Contact.html',history_contact = history_contact)
@@ -655,7 +655,7 @@ def create_contact():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("INSERT INTO THISTORY_CONTACT (nombre_colegio, fecha, tipo_contacto, descripcion) VALUES (%s, %s, %s, %s)",(main_school_key, fecha, tipo_contacto, descripcion))
+        cursor.execute("INSERT INTO THISTORY_CONTACT (nombre_k8s, fecha, tipo_contacto, descripcion) VALUES (%s, %s, %s, %s)",(main_school_key, fecha, tipo_contacto, descripcion))
         db.commit()
 
     return load_history_contact()
@@ -669,7 +669,7 @@ def delete_contact():
 
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("DELETE FROM THISTORY_CONTACT WHERE nombre_colegio=%s AND fecha=%s AND tipo_contacto=%s AND descripcion=%s", (main_school_key, fecha, tipo_contacto, descripcion))
+        cursor.execute("DELETE FROM THISTORY_CONTACT WHERE nombre_k8s=%s AND fecha=%s AND tipo_contacto=%s AND descripcion=%s", (main_school_key, fecha, tipo_contacto, descripcion))
         db.commit()
 
     return load_history_contact()
@@ -677,13 +677,13 @@ def delete_contact():
 ####################################        COMMON_ADMIN_FUNCTIONS       ###########################################
 #############################################################################################################
 
-@app.route('/Buscar_Colegio/',methods=["GET","POST"])
+@app.route('/Buscar_k8s/',methods=["GET","POST"])
 def search_school():
 
     query = request.form['query']
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM TColegio WHERE nombre_colegio LIKE %s", ("%" + query + "%",))
+        cursor.execute("SELECT * FROM Tk8s WHERE nombre_k8s LIKE %s", ("%" + query + "%",))
         results = cursor.fetchall()
     db.close()
     
@@ -695,7 +695,7 @@ def change_gestor_status():
     clase = request.form["Clase_gestor"]
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("UPDATE TColegio SET clase=%s WHERE nombre_usuario=%s", (clase, nombre_gestor))
+        cursor.execute("UPDATE Tk8s SET clase=%s WHERE nombre_usuario=%s", (clase, nombre_gestor))
         db.commit()
 
     return render_template("L3_EW_Upload_manager_status")
@@ -731,7 +731,7 @@ def descargar_excel():
     ws.append(list_columnas)
 
     for row in data:
-        if palabra_clave == "Colegios":
+        if palabra_clave == "k8ss":
             lista_correos = funtion_str_to_list(row[1])
             for correo in lista_correos:
                 correo = correo.replace("'","")
@@ -745,8 +745,8 @@ def descargar_excel():
         if palabra_clave == "eventos uniandes":
             with DatabaseConnection() as db:
                 cursor = db.cursor()
-                nombre_colegio = row[0]
-                cursor.execute("SELECT correo_colegio FROM TColegio WHERE nombre_colegio = %s", (nombre_colegio, ) )
+                nombre_k8s = row[0]
+                cursor.execute("SELECT correo_k8s FROM Tk8s WHERE nombre_k8s = %s", (nombre_k8s, ) )
                 lista_correos = cursor.fetchall()[0][0]
             lista_correos = funtion_str_to_list(lista_correos)
             for correo in lista_correos:
@@ -767,10 +767,10 @@ def descargar_excel():
 #############################################################################################################
 #################################        SUPER_ADMIN_FUNCTIONS       ########################################
 #############################################################################################################
-@app.route('/Página_tranferir_colegios', methods = ["GET","POST"])
-def transferir_colegios_page():
+@app.route('/Página_tranferir_k8ss', methods = ["GET","POST"])
+def transferir_k8ss_page():
     data_profesionales = [False, False, False]
-    list_colegios=[]
+    list_k8ss=[]
     with DatabaseConnection() as db:
         cursor = db.cursor()
         cursor.execute("SELECT nombre_usuario FROM TUser")
@@ -778,27 +778,27 @@ def transferir_colegios_page():
     if request.method == "POST":
         profesional1 = request.form.get("Profesional_1")
         profesional2 = request.form.get("Profesional_2")
-        departamento = request.form.get("Departamento_Colegio")
+        departamento = request.form.get("Departamento_k8s")
         if profesional1 and departamento:
             data_profesionales = [profesional1, profesional2, departamento]
             with DatabaseConnection() as db:
                 cursor = db.cursor()
                 if departamento == "TODOS LOS DEPARTAMENTOS":
-                    cursor.execute("SELECT nombre_colegio, departamento, correo_colegio, encargado_uniandes, rango_aportancia FROM TColegio WHERE encargado_uniandes LIKE %s", (profesional1,))
+                    cursor.execute("SELECT nombre_k8s, departamento, correo_k8s, encargado_uniandes, rango_aportancia FROM Tk8s WHERE encargado_uniandes LIKE %s", (profesional1,))
                 if departamento != "TODOS LOS DEPARTAMENTOS":
-                    cursor.execute("SELECT nombre_colegio, departamento, correo_colegio, encargado_uniandes, rango_aportancia FROM TColegio WHERE encargado_uniandes = %s AND departamento = %s", (profesional1, departamento, ))
-                list_colegios = cursor.fetchall()
+                    cursor.execute("SELECT nombre_k8s, departamento, correo_k8s, encargado_uniandes, rango_aportancia FROM Tk8s WHERE encargado_uniandes = %s AND departamento = %s", (profesional1, departamento, ))
+                list_k8ss = cursor.fetchall()
             response = 2
         else:
             response = 1
     else:
         response = 1
-    return render_template("L3_Transfer_sheet.html", list_profesionales=list_profesionales, response=response, lista_colegios=list_colegios, data_profesionales=data_profesionales)
+    return render_template("L3_Transfer_sheet.html", list_profesionales=list_profesionales, response=response, lista_k8ss=list_k8ss, data_profesionales=data_profesionales)
 
-@app.route('/Transferir_colegios_entre_profesionales', methods = ["GET","POST"])
-def transferir_colegios():
+@app.route('/Transferir_k8ss_entre_profesionales', methods = ["GET","POST"])
+def transferir_k8ss():
     query = request.form.get("data_cambio")
-    lista_colegios = request.form['lista_colegios']
+    lista_k8ss = request.form['lista_k8ss']
 
     action = request.form['action']
     query = json.loads(query)
@@ -812,35 +812,35 @@ def transferir_colegios():
         with DatabaseConnection() as db:
             cursor = db.cursor()
             if departamento != "TODOS LOS DEPARTAMENTOS":
-                cursor.execute("UPDATE TColegio SET encargado_uniandes = %s WHERE encargado_uniandes = %s AND departamento = %s",(profesional2, profesional1, departamento))
+                cursor.execute("UPDATE Tk8s SET encargado_uniandes = %s WHERE encargado_uniandes = %s AND departamento = %s",(profesional2, profesional1, departamento))
             else:
-                cursor.execute("UPDATE TColegio SET encargado_uniandes = %s WHERE encargado_uniandes = %s",(profesional2, profesional1))
+                cursor.execute("UPDATE Tk8s SET encargado_uniandes = %s WHERE encargado_uniandes = %s",(profesional2, profesional1))
             db.commit()
     elif action=='Selected Schools':
         if profesional2 == "":
             return render_template("L4_EW_SuperAdminSupportWindow.html", profesional1=profesional1, profesional2=profesional2, departamento=departamento, response=2)
 
-        lista_colegios = lista_colegios.replace('[','')
-        lista_colegios = lista_colegios.replace(']','')
-        lista_colegios = lista_colegios.replace('(','')
-        lista_colegios = lista_colegios.replace("'","")
-        lista_colegios = lista_colegios.split('), ')
-        lista_colegios_transferidos = []
-        for elemento in lista_colegios:
+        lista_k8ss = lista_k8ss.replace('[','')
+        lista_k8ss = lista_k8ss.replace(']','')
+        lista_k8ss = lista_k8ss.replace('(','')
+        lista_k8ss = lista_k8ss.replace("'","")
+        lista_k8ss = lista_k8ss.split('), ')
+        lista_k8ss_transferidos = []
+        for elemento in lista_k8ss:
             elemento = elemento.split(',')
             try:
                 form_answer = request.form[elemento[0]]
                 with DatabaseConnection() as db:
                     cursor = db.cursor()
-                    cursor.execute('UPDATE TColegio SET encargado_uniandes = %s WHERE encargado_uniandes = %s AND nombre_colegio = %s',(profesional2, profesional1, form_answer))
+                    cursor.execute('UPDATE Tk8s SET encargado_uniandes = %s WHERE encargado_uniandes = %s AND nombre_k8s = %s',(profesional2, profesional1, form_answer))
                     db.commit()
-                lista_colegios_transferidos.append(form_answer)
+                lista_k8ss_transferidos.append(form_answer)
             except:
                 None
-        return render_template("L4_EW_SuperAdminSupportWindow.html", profesional1=profesional1, profesional2=profesional2, departamento=departamento, response=3, lista_colegios_transferidos= lista_colegios_transferidos)
+        return render_template("L4_EW_SuperAdminSupportWindow.html", profesional1=profesional1, profesional2=profesional2, departamento=departamento, response=3, lista_k8ss_transferidos= lista_k8ss_transferidos)
     return render_template("L4_EW_SuperAdminSupportWindow.html", profesional1=profesional1, profesional2=profesional2, departamento=departamento, response=1)
 
-@app.route('/Ventana_crear_colegio', methods = ["GET","POST"])
+@app.route('/Ventana_crear_k8s', methods = ["GET","POST"])
 def EW_create_school():
     return render_template("L3_EW_Create_School.html", response=1)
 
@@ -849,10 +849,10 @@ def edit_official_uniandes_events():
     list_official_events = get_official_events()
     return render_template("L4_Edit_official_events.html", list_official_events=list_official_events)
 
-@app.route('/Crear_colegio', methods = ["GET","POST"])
+@app.route('/Crear_k8s', methods = ["GET","POST"])
 def create_school():
 
-    nombre_colegio = request.form.get('name_school')
+    nombre_k8s = request.form.get('name_school')
     nombre_premios = json.dumps([], ensure_ascii=False)
     nombre_eventos = json.dumps([], ensure_ascii=False)
     area_eventos = json.dumps([], ensure_ascii=False)
@@ -860,16 +860,16 @@ def create_school():
     nombre_fecha = json.dumps([], ensure_ascii=False)
     fecha = json.dumps([], ensure_ascii=False)
 
-    if verificar_no_existencia(dato=nombre_colegio, columna="nombre_colegio",tabla="TColegio"):
+    if verificar_no_existencia(dato=nombre_k8s, columna="nombre_k8s",tabla="Tk8s"):
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO TColegio (nombre_colegio, status) VALUES (%s, %s)", (nombre_colegio, "ACTIVO", ))
-            cursor.execute("UPDATE TColegio SET nombre_premios = %s, nombre_eventos = %s, area_eventos = %s, descripcion_eventos = %s WHERE nombre_colegio = %s", (nombre_premios, nombre_eventos, area_eventos, descripcion_eventos, nombre_colegio))
-            cursor.execute("UPDATE TColegio SET nombre_fecha = %s, fecha = %s WHERE nombre_colegio = %s", (nombre_fecha, fecha, nombre_colegio))
-            cursor.execute("INSERT INTO TMONU (nombre_colegio) VALUES (%s)", (nombre_colegio, ))
+            cursor.execute("INSERT INTO Tk8s (nombre_k8s, status) VALUES (%s, %s)", (nombre_k8s, "ACTIVO", ))
+            cursor.execute("UPDATE Tk8s SET nombre_premios = %s, nombre_eventos = %s, area_eventos = %s, descripcion_eventos = %s WHERE nombre_k8s = %s", (nombre_premios, nombre_eventos, area_eventos, descripcion_eventos, nombre_k8s))
+            cursor.execute("UPDATE Tk8s SET nombre_fecha = %s, fecha = %s WHERE nombre_k8s = %s", (nombre_fecha, fecha, nombre_k8s))
+            cursor.execute("INSERT INTO TMONU (nombre_k8s) VALUES (%s)", (nombre_k8s, ))
             db.commit()
 
-    return render_template("L3_EW_Create_School.html", response=2, school_name=nombre_colegio)
+    return render_template("L3_EW_Create_School.html", response=2, school_name=nombre_k8s)
 
 @app.route('/Administrar_profesionales', methods=["GET", "POST"])
 def manage_users_page():
@@ -902,7 +902,7 @@ def delete_professional():
         cursor=db.cursor()
         profesional=request.form["profesional"]
         cursor.execute("DELETE FROM TUser WHERE nombre_usuario=%s", (profesional,))
-        cursor.execute("UPDATE TColegio SET encargado_uniandes=%s WHERE encargado_uniandes=%s", ('NO ASIGNADO',profesional,))
+        cursor.execute("UPDATE Tk8s SET encargado_uniandes=%s WHERE encargado_uniandes=%s", ('NO ASIGNADO',profesional,))
         db.commit()
     return render_template('L4_EW_Delete_professional.html', profesional=None, response=2)
 
@@ -952,7 +952,7 @@ def monitoreo_profesionales():
            profesional = profesional[0]
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute('SELECT ultima_fecha_atencion, fecha_actualizacion, nombre_colegio, calendario FROM TColegio WHERE encargado_uniandes = %s', (profesional, ))
+            cursor.execute('SELECT ultima_fecha_atencion, fecha_actualizacion, nombre_k8s, calendario FROM Tk8s WHERE encargado_uniandes = %s', (profesional, ))
             data = cursor.fetchall()
         
         contador_actualizados = 0
@@ -1036,10 +1036,10 @@ def monitoreo_profesionales():
         
         name_user = session['nombre_usuario']  
 
-        num_colegios = len(data)
-        lista_profesional = [profesional, num_colegios, contador_actualizados, contador_atendidos, cactualA, catendA, ctotalA, cactualB, catendB, ctotalB]
+        num_k8ss = len(data)
+        lista_profesional = [profesional, num_k8ss, contador_actualizados, contador_atendidos, cactualA, catendA, ctotalA, cactualB, catendB, ctotalB]
         
-        if num_colegios!=0:
+        if num_k8ss!=0:
             data_monitoreo.append(lista_profesional)
 
     return render_template('L2_Control_Profesionales.html', data_monitoreo=data_monitoreo, enumerate=enumerate, data=final_data)
@@ -1053,25 +1053,25 @@ def load_monitoreo_contacto():
 def monitoreo_contacto():
 
     list_profesionales = obtener_profesionales()
-    final_list_columnas = ["Nombre Colegio", "Fecha de contacto","Estado" ,"Encargado", "Tipo de atención", "Descripción"]
+    final_list_columnas = ["Nombre k8s", "Fecha de contacto","Estado" ,"Encargado", "Tipo de atención", "Descripción"]
     result_search = []
     
-    nombre_colegio = request.form.get("nombre_colegio","")
+    nombre_k8s = request.form.get("nombre_k8s","")
     tipo_contacto = request.form.get("tipo_contacto", "")
     profesional = request.form.get("profesional", "")
     estado_actualizacion = request.form.get("estado_actualizacion", "")
     estado_atencion = request.form.get("estado_atencion", "")
 
-    if nombre_colegio==False:
-        nombre_colegio = "%"
+    if nombre_k8s==False:
+        nombre_k8s = "%"
     else:
-        nombre_colegio = "%"+ nombre_colegio + "%"
+        nombre_k8s = "%"+ nombre_k8s + "%"
 
     instruc_condicionales = ""
-    list_columnas = ["nombre_colegio","fecha","tipo_contacto","descripcion"]
+    list_columnas = ["nombre_k8s","fecha","tipo_contacto","descripcion"]
     list_condicionales = []
 
-    instruc_condicionales, list_condicionales, list_columnas, columnas = concatenar_query(selected_filter="historial", condicional=nombre_colegio, columnas='*', list_columnas=list_columnas, colum_condicional='nombre_colegio', instruc_condicionales=instruc_condicionales, list_condicionales=list_condicionales)
+    instruc_condicionales, list_condicionales, list_columnas, columnas = concatenar_query(selected_filter="historial", condicional=nombre_k8s, columnas='*', list_columnas=list_columnas, colum_condicional='nombre_k8s', instruc_condicionales=instruc_condicionales, list_condicionales=list_condicionales)
     instruc_condicionales, list_condicionales, list_columnas, columnas = concatenar_query(selected_filter="historial", condicional=tipo_contacto, columnas='*', list_columnas=list_columnas, colum_condicional='tipo_contacto', instruc_condicionales=instruc_condicionales, list_condicionales=list_condicionales)
 
     query = f"SELECT * FROM THISTORY_CONTACT WHERE {instruc_condicionales}"
@@ -1098,11 +1098,11 @@ def monitoreo_contacto():
 
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute("SELECT encargado_uniandes FROM TCOLEGIO WHERE nombre_colegio = %s",(nombrecol,))
+            cursor.execute("SELECT encargado_uniandes FROM Tk8s WHERE nombre_k8s = %s",(nombrecol,))
             profesional_encargado = cursor.fetchone()[0]
-            cursor.execute("SELECT estado_actualizacion FROM TCOLEGIO WHERE nombre_colegio = %s",(nombrecol,))
+            cursor.execute("SELECT estado_actualizacion FROM Tk8s WHERE nombre_k8s = %s",(nombrecol,))
             estact = cursor.fetchone()[0]
-            cursor.execute("SELECT estado_atencion FROM TCOLEGIO WHERE nombre_colegio = %s",(nombrecol,))
+            cursor.execute("SELECT estado_atencion FROM Tk8s WHERE nombre_k8s = %s",(nombrecol,))
             estatend = cursor.fetchone()[0]       
 
 
@@ -1145,7 +1145,7 @@ def filtered_search():
     action = request.form["action"]
     list_profesionales = obtener_profesionales()
 
-    if action=="BusColegios":
+    if action=="Busk8ss":
         return render_template('L3_Filter_Schools_Page.html', response=0, enumerate=enumerate, list_profesionales=list_profesionales)
     elif action=="BusProfesores":
         return render_template('L3_Filter_Teachers_Page.html', response = 0, enumerate=enumerate)
@@ -1155,10 +1155,10 @@ def filtered_search():
         list_profesionales = obtener_profesionales()
         return render_template('L3_Control_contact.html', list_profesionales=list_profesionales)
 
-@app.route('/Busqueda_filtrada/Colegios', methods=['GET','POST'])
-def busqueda_filtrada_colegios():
+@app.route('/Busqueda_filtrada/k8ss', methods=['GET','POST'])
+def busqueda_filtrada_k8ss():
     Estado = request.form["status"]
-    Departamento = request.form["Departamento_Colegio"]
+    Departamento = request.form["Departamento_k8s"]
     RangoAportancia = request.form["Rango_Aportancia"]
     Calendario = request.form["Calendario"]
     Encargado = request.form["encargado_uniandes"]
@@ -1168,11 +1168,11 @@ def busqueda_filtrada_colegios():
     fecha_actualizados_despues = request.form["fecha_actualizados_despues"]
 
     if RangoAportancia=="TODOS LOS RANGOS" and Calendario=="NULL" and Departamento=="NULL" and Encargado=="NULL" and fecha_actualizados_antes=="" and fecha_actualizados_despues=="" and fecha_atendidos_antes=="" and fecha_atendidos_despues=="" and Estado=="ACTIVO":
-        return render_template('L4_EW_Filter.html', palabra_clave="Colegios", response=0)
+        return render_template('L4_EW_Filter.html', palabra_clave="k8ss", response=0)
 
 
-    columnas = "nombre_colegio, correo_colegio, encargado_uniandes, tel_colegio, fecha_actualizacion, ultima_fecha_atencion"
-    list_columnas = ['Nombre Colegio','Correo Colegio','Encargado Uniandes','Teléfono Uniandes','Fecha de actualización','Última fecha de atención']
+    columnas = "nombre_k8s, correo_k8s, encargado_uniandes, tel_k8s, fecha_actualizacion, ultima_fecha_atencion"
+    list_columnas = ['Nombre k8s','Correo k8s','Encargado Uniandes','Teléfono Uniandes','Fecha de actualización','Última fecha de atención']
 
     if RangoAportancia=="1.0 - 2.0":
             list_columnas.append("Rango")
@@ -1188,7 +1188,7 @@ def busqueda_filtrada_colegios():
     instruc_condicionales, list_condicionales, list_columnas, columnas = concatenar_query(selected_filter="school", condicional=Encargado, columnas=columnas, list_columnas=list_columnas, colum_condicional='encargado_uniandes', instruc_condicionales=instruc_condicionales, list_condicionales=list_condicionales)
 
     if instruc_condicionales != "":
-        query = f"SELECT {columnas} FROM TColegio WHERE {instruc_condicionales}"
+        query = f"SELECT {columnas} FROM Tk8s WHERE {instruc_condicionales}"
         tuple_condicionales = tuple(list_condicionales)
         with DatabaseConnection() as db:
             cursor = db.cursor()
@@ -1200,7 +1200,7 @@ def busqueda_filtrada_colegios():
     if result_search == [] and RangoAportancia == "1.0 - 2.0":
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute(f"SELECT {columnas} FROM TColegio")
+            cursor.execute(f"SELECT {columnas} FROM Tk8s")
             result_search = cursor.fetchall()
 
     if RangoAportancia == "1.0 - 2.0":
@@ -1220,7 +1220,7 @@ def busqueda_filtrada_colegios():
     if result_search == [] and (fecha_actualizados_antes!=None or fecha_actualizados_despues!=None or fecha_atendidos_antes!=None or fecha_atendidos_despues!=None):
         with DatabaseConnection() as db:
             cursor = db.cursor()
-            cursor.execute(f"SELECT {columnas} FROM TColegio")
+            cursor.execute(f"SELECT {columnas} FROM Tk8s")
             result_search = cursor.fetchall()
 
     if fecha_actualizados_antes!=None or fecha_actualizados_despues!=None or fecha_atendidos_antes!=None or fecha_atendidos_despues!=None:
@@ -1287,7 +1287,7 @@ def busqueda_filtrada_profesores():
         enfasis_profesor = "%" + enfasis_profesor + "%"
 
     instruc_condicionales = ""
-    list_columnas = ["Colegio", "Nombre profesor", "Área", "Énfasis", "Teléfono", "Correo"]
+    list_columnas = ["k8s", "Nombre profesor", "Área", "Énfasis", "Teléfono", "Correo"]
     list_condicionales = []
 
     instruc_condicionales, list_condicionales, list_columnas, columnas = concatenar_query(selected_filter="teachers", condicional=nombre_profesor, columnas='*', list_columnas=list_columnas, colum_condicional='nombre_profesor', instruc_condicionales=instruc_condicionales, list_condicionales=list_condicionales)
@@ -1316,7 +1316,7 @@ def busqueda_filtrada_eventos_uniandes():
         return render_template('L4_EW_Filter.html', palabra_clave="Eventos Uniandes", response=0)
 
     instruc_condicionales = ""
-    list_columnas = ["Nombre colegio", "Num asistentes", "Tipo evento uniandes", "Profesional a cargo", "Fecha", "Descripción"]
+    list_columnas = ["Nombre k8s", "Num asistentes", "Tipo evento uniandes", "Profesional a cargo", "Fecha", "Descripción"]
     list_condicionales = []
 
     instruc_condicionales, list_condicionales, list_columnas, columnas = concatenar_query(selected_filter="uniandes_events", condicional=evento_uniandes, columnas="*", list_columnas=list_columnas, colum_condicional='tipo_feria_uniandes', instruc_condicionales=instruc_condicionales, list_condicionales=list_condicionales)
@@ -1346,22 +1346,22 @@ def busqueda_filtrada_fecha_actualizacion():
         if start_date!="" and final_date!="":
             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
             final_date = datetime.strptime(final_date, '%Y-%m-%d').date()
-            cursor.execute('SELECT nombre_colegio, fecha_actualizacion, correo_colegio, tel_colegio, departamento, municipio FROM TColegio WHERE fecha_actualizacion > %s AND fecha_actualizacion < %s', (start_date, final_date, ))
+            cursor.execute('SELECT nombre_k8s, fecha_actualizacion, correo_k8s, tel_k8s, departamento, municipio FROM Tk8s WHERE fecha_actualizacion > %s AND fecha_actualizacion < %s', (start_date, final_date, ))
         
         if start_date!="" and final_date=="":
             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            cursor.execute('SELECT nombre_colegio, fecha_actualizacion, correo_colegio, tel_colegio, departamento, municipio FROM TColegio WHERE fecha_actualizacion > %s', (start_date, ))
+            cursor.execute('SELECT nombre_k8s, fecha_actualizacion, correo_k8s, tel_k8s, departamento, municipio FROM Tk8s WHERE fecha_actualizacion > %s', (start_date, ))
 
         if start_date=="" and final_date!="":
             final_date = datetime.strptime(final_date, '%Y-%m-%d').date()
-            cursor.execute('SELECT nombre_colegio, fecha_actualizacion, correo_colegio, tel_colegio, departamento, municipio FROM TColegio WHERE fecha_actualizacion < %s', (final_date, ))
+            cursor.execute('SELECT nombre_k8s, fecha_actualizacion, correo_k8s, tel_k8s, departamento, municipio FROM Tk8s WHERE fecha_actualizacion < %s', (final_date, ))
 
         if start_date=="" and  final_date=="":
             return render_template('L4_EW_Filter.html', palabra_clave="Fechas de actualización", response=0)
         data = cursor.fetchall()
 
     num_coincidences = len(data)
-    return render_template('L3_Filter_Update_Dates.html', response=1, result_search=data, enumerate=enumerate,list_columnas=['Nombre del colegio', 'Última fecha de actualización', 'Correo', 'Teléfono', 'Departamento', 'Municipio'], num_coincidences=num_coincidences)
+    return render_template('L3_Filter_Update_Dates.html', response=1, result_search=data, enumerate=enumerate,list_columnas=['Nombre del k8s', 'Última fecha de actualización', 'Correo', 'Teléfono', 'Departamento', 'Municipio'], num_coincidences=num_coincidences)
 
 @app.route('/descargar_database', methods=["POST"])
 def descargar_tabla():
@@ -1369,15 +1369,15 @@ def descargar_tabla():
     action = request.form["action"]
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        if action=="Colegios" or action=="Colegios - Correos":
-            cursor.execute("SELECT * FROM TColegio")
-            colum_name = ['Correo','Nombre','Profesional a cargo','Fecha de actualización','Última fecha de atención','Último tipo de atención','Teléfono del colegio','Departamento','Municipio','Dirección del colegio','Rango de aportancia','Código Icfes','Código DANE','Nombre de contacto','Teléfono del contacto','Cargo del contacto','Nombre del orientador','Correo del orientador','Teléfono del orientador','Extensión del orientador','Nombre de rector','Web','Calendario','Modelo ONU','Nombres de eventos','Áreas de eventos','Descripción de eventos','Nombre de ferias','Fechas','Estado','Notas adicionales']
+        if action=="k8ss" or action=="k8ss - Correos":
+            cursor.execute("SELECT * FROM Tk8s")
+            colum_name = ['Correo','Nombre','Profesional a cargo','Fecha de actualización','Última fecha de atención','Último tipo de atención','Teléfono del k8s','Departamento','Municipio','Dirección del k8s','Rango de aportancia','Código Icfes','Código DANE','Nombre de contacto','Teléfono del contacto','Cargo del contacto','Nombre del orientador','Correo del orientador','Teléfono del orientador','Extensión del orientador','Nombre de rector','Web','Calendario','Modelo ONU','Nombres de eventos','Áreas de eventos','Descripción de eventos','Nombre de ferias','Fechas','Estado','Notas adicionales']
         elif action=="Profesores":
             cursor.execute("SELECT * FROM TProfesores")
-            colum_name = ['Colegio profesor','Nombre profesor','Área de profesor','Énfasis de profesor','Teléfono de profesor','Correo de profesor']
+            colum_name = ['k8s profesor','Nombre profesor','Área de profesor','Énfasis de profesor','Teléfono de profesor','Correo de profesor']
         elif action=="Eventos":
             cursor.execute("SELECT * FROM TUniandes_Events")
-            colum_name = ['Nombre colegio','Número de atendidos','Tipo de feria','Profesional que atendió','Fecha de feria','Descripción']
+            colum_name = ['Nombre k8s','Número de atendidos','Tipo de feria','Profesional que atendió','Fecha de feria','Descripción']
         data = cursor.fetchall()
 
     fecha_primitiva = str(datetime.now())
@@ -1389,7 +1389,7 @@ def descargar_tabla():
     ws.append(colum_name)
     for row in data:
         row = list(row)
-        if action == "Colegios - Correos":
+        if action == "k8ss - Correos":
             lista_correos = funtion_str_to_list(row[0])
             for correo in lista_correos:                
                 correo = correo.replace("'","")
@@ -1430,22 +1430,22 @@ def review_created_password(password:str)->bool:
             return True
     return False
 
-def get_school_data(nombre_colegio:str):
+def get_school_data(nombre_k8s:str):
     
     with DatabaseConnection() as db:
         cursor = db.cursor()
         
-        cursor.execute("SELECT correo_colegio, nombre_colegio, fecha_actualizacion, encargado_uniandes, tel_colegio, departamento, municipio, dir_colegio, rango_aportancia, cod_icfes, cod_dane, ultima_fecha_atencion, ultimo_tipo_atencion, status, nota_adicional  FROM TColegio WHERE nombre_colegio = %s", (nombre_colegio,))
-        dataTColegio = cursor.fetchone()
+        cursor.execute("SELECT correo_k8s, nombre_k8s, fecha_actualizacion, encargado_uniandes, tel_k8s, departamento, municipio, dir_k8s, rango_aportancia, cod_icfes, cod_dane, ultima_fecha_atencion, ultimo_tipo_atencion, status, nota_adicional  FROM Tk8s WHERE nombre_k8s = %s", (nombre_k8s,))
+        dataTk8s = cursor.fetchone()
 
-        cursor.execute("SELECT nombre_contacto, telefono_contacto, cargo_contacto, nombre_orientador, correo_orientador, tel_orientador, extension_orientador FROM TColegio WHERE nombre_colegio = %s", (nombre_colegio,))
+        cursor.execute("SELECT nombre_contacto, telefono_contacto, cargo_contacto, nombre_orientador, correo_orientador, tel_orientador, extension_orientador FROM Tk8s WHERE nombre_k8s = %s", (nombre_k8s,))
         dataTContactos = cursor.fetchone()
         
-        cursor.execute("SELECT nombre_rector, web, calendario FROM TColegio WHERE nombre_colegio = %s", (nombre_colegio,))
+        cursor.execute("SELECT nombre_rector, web, calendario FROM Tk8s WHERE nombre_k8s = %s", (nombre_k8s,))
         dataTPerfil = cursor.fetchone()
         
-        fecha_actualizacion = dataTColegio[2]
-        fecha_atencion = dataTColegio[11]
+        fecha_actualizacion = dataTk8s[2]
+        fecha_atencion = dataTk8s[11]
         calendario = dataTPerfil[2]
         fecha_primitiva = datetime.now()
         fecha_hoy = fecha_primitiva.date()
@@ -1457,44 +1457,44 @@ def get_school_data(nombre_colegio:str):
                 if fecha_atencion!=None:
                     if fecha_hoy.year==fecha_atencion.year and semestre=="segundo_semestre":
                         if fecha_atencion.month==7 or fecha_atencion.month==8 or fecha_atencion.month==9 or fecha_atencion.month==10 or fecha_atencion.month==11 or fecha_atencion.month==12:
-                            cursor.execute("UPDATE  TColegio SET estado_atencion = %s WHERE nombre_colegio=%s", ("ATENDIDO", nombre_colegio))
+                            cursor.execute("UPDATE  Tk8s SET estado_atencion = %s WHERE nombre_k8s=%s", ("ATENDIDO", nombre_k8s))
                     elif fecha_hoy.year==fecha_atencion.year and semestre=="primer_semestre":
-                            cursor.execute("UPDATE  TColegio SET estado_atencion = %s WHERE nombre_colegio=%s", ("ATENDIDO", nombre_colegio))
+                            cursor.execute("UPDATE  Tk8s SET estado_atencion = %s WHERE nombre_k8s=%s", ("ATENDIDO", nombre_k8s))
                     elif int(fecha_hoy.year)==int(fecha_atencion.year)+1 and semestre=="primer_semestre":
                         if fecha_atencion.month==7 or fecha_atencion.month==8 or fecha_atencion.month==9 or fecha_atencion.month==10 or fecha_atencion.month==11 or fecha_atencion.month==12:
-                            cursor.execute("UPDATE  TColegio SET estado_atencion = %s WHERE nombre_colegio=%s", ("ATENDIDO", nombre_colegio))
+                            cursor.execute("UPDATE  Tk8s SET estado_atencion = %s WHERE nombre_k8s=%s", ("ATENDIDO", nombre_k8s))
                     else:
-                        cursor.execute("UPDATE  TColegio SET estado_atencion = %s WHERE nombre_colegio=%s", ("NO ATENDIDO", nombre_colegio))
+                        cursor.execute("UPDATE  Tk8s SET estado_atencion = %s WHERE nombre_k8s=%s", ("NO ATENDIDO", nombre_k8s))
 
                 if fecha_actualizacion!=None:
                     if fecha_hoy.year==fecha_actualizacion.year and semestre=="segundo_semestre":
                         if fecha_actualizacion.month==7 or fecha_actualizacion.month==8 or fecha_actualizacion.month==9 or fecha_actualizacion.month==10 or fecha_actualizacion.month==11 or fecha_actualizacion.month==12:
-                            cursor.execute("UPDATE  TColegio SET estado_actualizacion = %s WHERE nombre_colegio=%s", ("ACTUALIZADO", nombre_colegio))
+                            cursor.execute("UPDATE  Tk8s SET estado_actualizacion = %s WHERE nombre_k8s=%s", ("ACTUALIZADO", nombre_k8s))
                     elif fecha_hoy.year==fecha_actualizacion.year and semestre=="primer_semestre":
-                            cursor.execute("UPDATE  TColegio SET estado_actualizacion = %s WHERE nombre_colegio=%s", ("ACTUALIZADO", nombre_colegio))
+                            cursor.execute("UPDATE  Tk8s SET estado_actualizacion = %s WHERE nombre_k8s=%s", ("ACTUALIZADO", nombre_k8s))
                     elif int(fecha_hoy.year)==int(fecha_actualizacion.year)+1 and semestre=="primer_semestre":
                         if fecha_actualizacion.month==7 or fecha_actualizacion.month==8 or fecha_actualizacion.month==9 or fecha_actualizacion.month==10 or fecha_actualizacion.month==11 or fecha_actualizacion.month==12:
-                            cursor.execute("UPDATE  TColegio SET estado_actualizacion = %s WHERE nombre_colegio=%s", ("ACTUALIZADO", nombre_colegio))
+                            cursor.execute("UPDATE  Tk8s SET estado_actualizacion = %s WHERE nombre_k8s=%s", ("ACTUALIZADO", nombre_k8s))
                     else:
-                        cursor.execute("UPDATE  TColegio SET estado_actualizacion = %s WHERE nombre_colegio=%s", ("NO ACTUALIZADO", nombre_colegio))
+                        cursor.execute("UPDATE  Tk8s SET estado_actualizacion = %s WHERE nombre_k8s=%s", ("NO ACTUALIZADO", nombre_k8s))
                     
             if calendario=="A":
                 if fecha_atencion!=None:
                     if fecha_hoy.year==fecha_atencion.year:
-                        cursor.execute("UPDATE  TColegio SET estado_atencion = %s WHERE nombre_colegio=%s", ("ATENDIDO", nombre_colegio))                    
+                        cursor.execute("UPDATE  Tk8s SET estado_atencion = %s WHERE nombre_k8s=%s", ("ATENDIDO", nombre_k8s))                    
                     else:
-                        cursor.execute("UPDATE  TColegio SET estado_atencion = %s WHERE nombre_colegio=%s", ("NO ATENDIDO", nombre_colegio))
+                        cursor.execute("UPDATE  Tk8s SET estado_atencion = %s WHERE nombre_k8s=%s", ("NO ATENDIDO", nombre_k8s))
 
                 if fecha_actualizacion!=None:
                     if fecha_hoy.year==fecha_actualizacion.year:
-                        cursor.execute("UPDATE  TColegio SET estado_actualizacion = %s WHERE nombre_colegio=%s", ("ACTUALIZADO", nombre_colegio))
+                        cursor.execute("UPDATE  Tk8s SET estado_actualizacion = %s WHERE nombre_k8s=%s", ("ACTUALIZADO", nombre_k8s))
                     else:
-                            cursor.execute("UPDATE  TColegio SET estado_actualizacion = %s WHERE nombre_colegio=%s", ("NO ACTUALIZADO", nombre_colegio))
+                            cursor.execute("UPDATE  Tk8s SET estado_actualizacion = %s WHERE nombre_k8s=%s", ("NO ACTUALIZADO", nombre_k8s))
             db.commit()
 
 
 
-    return (dataTColegio, dataTContactos, dataTPerfil)
+    return (dataTk8s, dataTContactos, dataTPerfil)
 
 def obtener_profesionales()->list:
     with DatabaseConnection() as db:
@@ -1549,14 +1549,14 @@ def get_official_events():
         list_official_events.append(evento)
     return (list_official_events)
 
-def actualizar_fecha(nombre_colegio: str):
+def actualizar_fecha(nombre_k8s: str):
     fecha_primitiva = datetime.now()
 
     fecha = fecha_primitiva.date()
     
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute("UPDATE TColegio SET fecha_actualizacion=%s WHERE nombre_colegio=%s",(fecha, nombre_colegio, ))
+        cursor.execute("UPDATE Tk8s SET fecha_actualizacion=%s WHERE nombre_k8s=%s",(fecha, nombre_k8s, ))
         db.commit()
     
     return 
@@ -1567,10 +1567,10 @@ def actualizar_correo(correo):
     return correo
 
 def actualizar_ultima_atencion():
-    nombre_colegio = session['main_school_key']
+    nombre_k8s = session['main_school_key']
     with DatabaseConnection() as db:
         cursor = db.cursor()
-        cursor.execute('SELECT fecha_feria_uniandes, tipo_feria_uniandes FROM TUniandes_Events WHERE nombre_colegio = %s', (nombre_colegio ,))    
+        cursor.execute('SELECT fecha_feria_uniandes, tipo_feria_uniandes FROM TUniandes_Events WHERE nombre_k8s = %s', (nombre_k8s ,))    
         fechas_feria = cursor.fetchall()
     
     ultima_fecha_atencion = date(2001, 12, 11)
@@ -1590,7 +1590,7 @@ def actualizar_ultima_atencion():
             ultimo_evento = evento
             with DatabaseConnection() as db:
                 cursor = db.cursor()
-                cursor.execute('UPDATE TColegio SET ultima_fecha_atencion=%s, ultimo_tipo_atencion=%s WHERE nombre_colegio=%s',(ultima_fecha_atencion,ultimo_evento,nombre_colegio))
+                cursor.execute('UPDATE Tk8s SET ultima_fecha_atencion=%s, ultimo_tipo_atencion=%s WHERE nombre_k8s=%s',(ultima_fecha_atencion,ultimo_evento,nombre_k8s))
                 db.commit()
 
 
